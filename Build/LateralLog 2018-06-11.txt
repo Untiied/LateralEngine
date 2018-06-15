@@ -1,0 +1,3 @@
+[Log] Attemping to create a window...
+[Log] GLFW Window creation successful!
+[Vulkan] Successfully created a vulkan instance!

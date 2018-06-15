@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="A:\lateralEngine\lateral\Code\Source\Utilities\Globals.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="A:\lateralEngine\lateral\Code\Source\Utilities\Input.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="A:\lateralEngine\lateral\Code\Source\Utilities\Log.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="A:\lateralEngine\lateral\Code\Source\Utilities\Vulkan\VulkanUtilities.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="A:\lateralEngine\lateral\Code\Source\Window\Window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="A:\lateralEngine\lateral\Code\Source\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Source\Utilities\Vulkan\VulkanDebugger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="A:\lateralEngine\lateral\Code\Source\Utilities\Globals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="A:\lateralEngine\lateral\Code\Source\Utilities\Input.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="A:\lateralEngine\lateral\Code\Source\Utilities\Log.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="A:\lateralEngine\lateral\Code\Source\Utilities\Vulkan\VulkanUtilities.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="A:\lateralEngine\lateral\Code\Source\Window\Window.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="..\Code\Source\Utilities\Vulkan\VulkanDebugger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="A:\lateralEngine\lateral\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{04CDFD8A-D8F1-3F83-9CCC-9DCA8FE1DA62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{89B3A3FA-E40F-3C84-B389-76FA9DF12EB9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="lateral.rc" />
+  </ItemGroup>
+</Project>

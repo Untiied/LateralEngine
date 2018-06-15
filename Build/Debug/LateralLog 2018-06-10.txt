@@ -1,0 +1,4 @@
+[Log] Attemping to create a window...
+[Log] GLFW Window creation successful!
+[Vulkan Fatal] Validation instance couldn't not be found!
+[Vulkan Fatal] failed to create vulkan instance!

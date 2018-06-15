@@ -1,0 +1,7 @@
+[Log] Attemping to create a window...
+[Log] GLFW Window creation successful!
+[Vulkan] Successfully created a vulkan instance!
+[Vulkan] Found 1 GPUS ready for Vulkan usage
+[Vulkan] GPU selected: GeForce GTX 1060 6GB
+[Vulkan] Created a Vulkan Logical Device!
+[Vulkan] Created a link between Vulkan & GLFW!

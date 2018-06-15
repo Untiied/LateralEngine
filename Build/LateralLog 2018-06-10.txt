@@ -1,0 +1,4 @@
+[Log] Attemping to create a window...
+[Log] GLFW Window creation successful!
+[Vulkan] Successfuly created a vulkan instance!
+[Vulkan Fatal] Could not create a Vulkan debug context!
