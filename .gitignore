@@ -1,3 +1,8 @@
 
+#removes the files.
 External/
 Build/
+
+#keeps the dir.
+!External/.keep
+!Build/.keep
