@@ -1,4 +1,0 @@
-﻿  VulkanRenderer.cpp
-a:\lateralengine\lateral\code\source\utilities\globals.h(10): warning C4114: same type qualifier used more than once
-a:\lateralengine\lateral\code\source\renderer\vulkanrenderer.cpp(465): warning C4838: conversion from 'int' to 'uint32_t' requires a narrowing conversion
-  lateral.vcxproj -> A:\lateralEngine\lateral\Build\Release\lateral.exe
