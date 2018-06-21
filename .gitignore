@@ -1,7 +1,7 @@
 
 #removes the files.
-External/
-Build/
+External/*
+Build/*
 
 #keeps the dir.
 !External/.keep
