@@ -41,7 +41,7 @@ void Window::PopulateConfig()
 {
 	GlobalVariables::Window::width = 500;
 	GlobalVariables::Window::height = 500;
-	GlobalVariables::Application::ApplicationName = "PROJECT NAME HERE";
+	GlobalVariables::Application::ApplicationName = "Lateral -- Test";
 }
 
 void ResizeCallback(GLFWwindow * window, int width, int height)
@@ -54,8 +54,6 @@ void ResizeCallback(GLFWwindow * window, int width, int height)
 
 void Window::CreateWindow()
 {
-	Log("Attemping to create a window...")
-	//No need to use opengl with this engine.
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 	m_Window = glfwCreateWindow(GlobalVariables::Window::width, GlobalVariables::Window::height, GlobalVariables::Application::ApplicationName, nullptr, nullptr);
 	glfwSetCursorPosCallback(m_Window, &Input::UpdateMousePosition);
@@ -64,7 +62,7 @@ void Window::CreateWindow()
 	glfwSetKeyCallback(m_Window, &Input::UpdateKey);
 	glfwSetWindowAttrib(m_Window, GLFW_AUTO_ICONIFY, true);
 	glfwSetWindowAttrib(m_Window, GLFW_RESIZABLE, true);
-	Log("GLFW Window creation successful!")
+	Log("Window creation successful!")
 }
 
 Window::~Window() {
