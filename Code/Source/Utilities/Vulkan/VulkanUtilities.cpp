@@ -6,6 +6,8 @@
 #include <map>
 #include <set>
 
+VulkanUtilities *VulkanUtilities::instance = 0;
+
 VulkanUtilities::VulkanUtilities()
 {
 #ifdef NDEBUG
@@ -25,8 +27,6 @@ void VulkanUtilities::Initilize(GLFWwindow& GLFWWindow)
 	CreateSurface();
 	PickGraphicsDevice();
 	CreateLogicalDevice();
-	//If this starts to throw errors check the window surface on the vulkan tut.
-	CreateSwapchain();
 }
 
 void VulkanUtilities::CreateVulkanInstance()
@@ -166,11 +166,6 @@ void VulkanUtilities::CreateSurface()
 	}
 }
 
-void VulkanUtilities::CreateSwapchain() {
-	//Sets the swapchain creation info.
-
-}
-
 VkPhysicalDevice VulkanUtilities::FindMostSuitableCard(const std::vector<VkPhysicalDevice>& AvailableCards)
 {
 	typedef std::multimap<int, VkPhysicalDevice> RankedDevicesMap;
@@ -254,13 +249,13 @@ bool VulkanUtilities::isBindedDeviceSuitable()
 
 	bool SupportsSwapchain = CheckBindedDeviceExtensionSupport();
 
-	bool swapChainAdequate = false;
-	if (SupportsSwapchain) {
-		SwapchainSupportDetails swapChainSupport = QuerySwapchainSupport();
-		swapChainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
-	}
+	//bool swapChainAdequate = false;
+	//if (SupportsSwapchain) {
+	//	SwapchainSupportDetails swapChainSupport = QuerySwapchainSupport();
+	//	swapChainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
+	//}
 
-	return index.isComplete() && SupportsSwapchain;
+	return index.isComplete();// && SupportsSwapchain;
 }
 
 bool VulkanUtilities::CheckBindedDeviceExtensionSupport()
@@ -278,44 +273,6 @@ bool VulkanUtilities::CheckBindedDeviceExtensionSupport()
 	}
 
 	return requiredExtensions.empty();
-}
-
-SwapchainSupportDetails VulkanUtilities::QuerySwapchainSupport()
-{
-	SwapchainSupportDetails SwapDetails;
-
-	uint32_t formatCount;
-	vkGetPhysicalDeviceSurfaceFormatsKHR(PhysicalDevice, VulkanSurface, &formatCount, nullptr);
-
-	if (formatCount != 0) {
-		SwapDetails.formats.resize(formatCount);
-		vkGetPhysicalDeviceSurfaceFormatsKHR(PhysicalDevice, VulkanSurface, &formatCount, SwapDetails.formats.data());
-	}
-
-	uint32_t presentModeCount;
-	vkGetPhysicalDeviceSurfacePresentModesKHR(PhysicalDevice, VulkanSurface, &presentModeCount, nullptr);
-
-	if (presentModeCount != 0) {
-		SwapDetails.presentModes.resize(presentModeCount);
-		vkGetPhysicalDeviceSurfacePresentModesKHR(PhysicalDevice, VulkanSurface, &presentModeCount, SwapDetails.presentModes.data());
-	}
-
-	return SwapDetails;
-}
-
-VkSurfaceFormatKHR VulkanUtilities::chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats)
-{
-	if (availableFormats.size() == 1 && availableFormats[0].format == VK_FORMAT_UNDEFINED) {
-		return { VK_FORMAT_B8G8R8A8_UNORM, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR };
-	}
-
-	for (const auto& availableFormat : availableFormats) {
-		if (availableFormat.format == VK_FORMAT_B8G8R8A8_UNORM && availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
-			return availableFormat;
-		}
-	}
-
-	return availableFormats[0];
 }
 
 std::vector<const char*> VulkanUtilities::getGLFWExtensions()

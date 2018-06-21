@@ -259,15 +259,21 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="A:\lateralEngine\lateral\Code\Source\Renderer\Shader.cpp"  />
+    <ClCompile Include="A:\lateralEngine\lateral\Code\Source\Renderer\VulkanRenderer.cpp"  />
     <ClCompile Include="A:\lateralEngine\lateral\Code\Source\Utilities\Globals.cpp"  />
     <ClCompile Include="A:\lateralEngine\lateral\Code\Source\Utilities\Input.cpp"  />
     <ClCompile Include="A:\lateralEngine\lateral\Code\Source\Utilities\Log.cpp"  />
+    <ClCompile Include="A:\lateralEngine\lateral\Code\Source\Utilities\Vulkan\VulkanDebugger.cpp"  />
     <ClCompile Include="A:\lateralEngine\lateral\Code\Source\Utilities\Vulkan\VulkanUtilities.cpp"  />
     <ClCompile Include="A:\lateralEngine\lateral\Code\Source\Window\Window.cpp"  />
     <ClCompile Include="A:\lateralEngine\lateral\Code\Source\main.cpp"  />
+    <ClInclude Include="A:\lateralEngine\lateral\Code\Source\Renderer\Shader.h" />
+    <ClInclude Include="A:\lateralEngine\lateral\Code\Source\Renderer\VulkanRenderer.h" />
     <ClInclude Include="A:\lateralEngine\lateral\Code\Source\Utilities\Globals.h" />
     <ClInclude Include="A:\lateralEngine\lateral\Code\Source\Utilities\Input.h" />
     <ClInclude Include="A:\lateralEngine\lateral\Code\Source\Utilities\Log.h" />
+    <ClInclude Include="A:\lateralEngine\lateral\Code\Source\Utilities\Vulkan\VulkanDebugger.h" />
     <ClInclude Include="A:\lateralEngine\lateral\Code\Source\Utilities\Vulkan\VulkanUtilities.h" />
     <ClInclude Include="A:\lateralEngine\lateral\Code\Source\Window\Window.h" />
   </ItemGroup>

@@ -1,10 +1,9 @@
-#define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
 #include "Utilities/Input.h"
-#include "Window/Window.h"
 #include "Utilities/Globals.h"
 #include "Utilities/Vulkan/VulkanUtilities.h"
+#include "Renderer/VulkanRenderer.h"
 #include "Utilities/Log.h"
+#include "Window/Window.h"
 
 #if 0
 class Engine
@@ -21,16 +20,16 @@ private:
 #endif
 
 int main() {
-	VulkanUtilities VkUtils;
 	LateralEngine::Window GameWindow;
 
-	VkUtils.Initilize(*GameWindow.GetWindow());
-
+	VulkanUtilities::GetInstance()->Initilize(*GameWindow.GetWindow());
+	VulkanRenderer::GetInstance()->Initilize();
 	while (!GameWindow.ShouldClose()) {
 		GameWindow.Update();
 		if (Input::GetKey(KeyCode::ESC)) {
 			GameWindow.Close();
 		}
+		VulkanRenderer::GetInstance()->Draw();
 	}
 
 	//delete(&VkUtils);

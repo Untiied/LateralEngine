@@ -1,5 +1,6 @@
 #pragma once
-#include "GLFW/glfw3.h"
+#define GLFW_INCLUDE_VULKAN
+#include <GLFW/glfw3.h>
 
 namespace LateralEngine{
 	void ResizeCallback(GLFWwindow* window, int width, int height);

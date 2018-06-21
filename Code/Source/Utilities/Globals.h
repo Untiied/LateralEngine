@@ -2,6 +2,7 @@
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 #include <string>
+#include <vector>
 
 namespace GlobalVariables{
 	
@@ -13,14 +14,12 @@ namespace GlobalVariables{
 	namespace Window {
 		extern int width;
 		extern int height;
-		float aspect();
+		extern float aspect();
 	}
 
-	namespace Graphics {
-		//extern VkInstance VulkanInstance;
-	}
 }
 
 namespace Utils {
 	extern const std::string currentDateTime();
+	extern const std::vector<char> readFile(const char* path);
 }

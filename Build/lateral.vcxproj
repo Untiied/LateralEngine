@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -138,8 +138,7 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
-      <DebugInformationFormat>
-      </DebugInformationFormat>
+      <DebugInformationFormat></DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -181,8 +180,7 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
-      <DebugInformationFormat>
-      </DebugInformationFormat>
+      <DebugInformationFormat></DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -309,20 +307,23 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Code\Source\Utilities\Vulkan\VulkanDebugger.cpp" />
-    <ClCompile Include="A:\lateralEngine\lateral\Code\Source\Utilities\Globals.cpp" />
-    <ClCompile Include="A:\lateralEngine\lateral\Code\Source\Utilities\Input.cpp" />
-    <ClCompile Include="A:\lateralEngine\lateral\Code\Source\Utilities\Log.cpp" />
-    <ClCompile Include="A:\lateralEngine\lateral\Code\Source\Utilities\Vulkan\VulkanUtilities.cpp" />
-    <ClCompile Include="A:\lateralEngine\lateral\Code\Source\Window\Window.cpp" />
-    <ClCompile Include="A:\lateralEngine\lateral\Code\Source\main.cpp" />
-    <ClInclude Include="..\Code\Source\Utilities\Vulkan\VulkanDebugger.h" />
+    <ClCompile Include="A:\lateralEngine\lateral\Code\Source\Renderer\Shader.cpp"  />
+    <ClCompile Include="A:\lateralEngine\lateral\Code\Source\Renderer\VulkanRenderer.cpp"  />
+    <ClCompile Include="A:\lateralEngine\lateral\Code\Source\Utilities\Globals.cpp"  />
+    <ClCompile Include="A:\lateralEngine\lateral\Code\Source\Utilities\Input.cpp"  />
+    <ClCompile Include="A:\lateralEngine\lateral\Code\Source\Utilities\Log.cpp"  />
+    <ClCompile Include="A:\lateralEngine\lateral\Code\Source\Utilities\Vulkan\VulkanDebugger.cpp"  />
+    <ClCompile Include="A:\lateralEngine\lateral\Code\Source\Utilities\Vulkan\VulkanUtilities.cpp"  />
+    <ClCompile Include="A:\lateralEngine\lateral\Code\Source\Window\Window.cpp"  />
+    <ClCompile Include="A:\lateralEngine\lateral\Code\Source\main.cpp"  />
+    <ClInclude Include="A:\lateralEngine\lateral\Code\Source\Renderer\Shader.h" />
+    <ClInclude Include="A:\lateralEngine\lateral\Code\Source\Renderer\VulkanRenderer.h" />
     <ClInclude Include="A:\lateralEngine\lateral\Code\Source\Utilities\Globals.h" />
     <ClInclude Include="A:\lateralEngine\lateral\Code\Source\Utilities\Input.h" />
     <ClInclude Include="A:\lateralEngine\lateral\Code\Source\Utilities\Log.h" />
+    <ClInclude Include="A:\lateralEngine\lateral\Code\Source\Utilities\Vulkan\VulkanDebugger.h" />
     <ClInclude Include="A:\lateralEngine\lateral\Code\Source\Utilities\Vulkan\VulkanUtilities.h" />
     <ClInclude Include="A:\lateralEngine\lateral\Code\Source\Window\Window.h" />
-    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="A:\lateralEngine\lateral\Build\ZERO_CHECK.vcxproj">
@@ -333,9 +334,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Project>{6E9F7092-B4A6-37B9-98CA-8980BAE4ECB0}</Project>
       <Name>glfw</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="lateral.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

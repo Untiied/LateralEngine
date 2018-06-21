@@ -3,12 +3,6 @@
 #include <GLFW/glfw3.h>
 #include <vector>
 
-struct SwapchainSupportDetails {
-	VkSurfaceCapabilitiesKHR capabilities;
-	std::vector<VkSurfaceFormatKHR> formats;
-	std::vector<VkPresentModeKHR> presentModes;
-};
-
 struct QueueFamilyIndex {
 	int QueueID = -1;
 	int PresentQueueID = -1;
@@ -21,6 +15,15 @@ struct QueueFamilyIndex {
 class VulkanUtilities
 {
 public:
+	static VulkanUtilities* instance;
+
+	static VulkanUtilities *GetInstance()
+	{
+		if (!instance)
+			instance = new VulkanUtilities;
+		return instance;
+	}
+
 	VulkanUtilities();
 	~VulkanUtilities();
 
@@ -57,26 +60,16 @@ public:
 	//Creates the surface between glfw and Vulkan.
 	void CreateSurface();
 
-	//Creates the swapchain for Vulkan to begin the render pipeline.
-	void CreateSwapchain();
-
 	//Checks to make sure you can use the swapchain.
 	bool CheckBindedDeviceExtensionSupport();
 
-	//Populates the Swapchain Details.
-	SwapchainSupportDetails QuerySwapchainSupport();
-
-	//Chooses the color format for the render pipeline.
-	VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR> &availableFormats);
 public:
 	bool EnableValidation;
-
 	VkApplicationInfo AppInfo = {};
 	VkDeviceCreateInfo DeviceCreateInfo = {};
 	VkInstanceCreateInfo InstanceCreationInfo = {};
 	VkDeviceQueueCreateInfo QueueCreateInfo = {};
 	VkPhysicalDeviceFeatures PhysicalDeviceFeatures = {};
-	VkSwapchainCreateInfoKHR SwapchainCreationInfo = {};
 	VkInstance VulkanInstance = VK_NULL_HANDLE;
 	VkPhysicalDevice PhysicalDevice = VK_NULL_HANDLE;
 	VkDevice VulkanDevice = VK_NULL_HANDLE;
@@ -84,7 +77,6 @@ public:
 	VkQueue PresentQueue = VK_NULL_HANDLE;
 	VkSurfaceKHR VulkanSurface = {};
 	class VulkanDebugger* VulkanDebug;
-	SwapchainSupportDetails VulkanSwapchainSupport;
 
 	GLFWwindow* GameWindow;
 

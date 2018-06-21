@@ -69,6 +69,7 @@ private:
 };
 
 #define VulkanLog(...) Logger::GetLogger()->LogMaster("Vulkan", __VA_ARGS__);
+#define VulkanDebugLog(...) Logger::GetLogger()->LogMaster("Vulkan Debugger", __VA_ARGS__);
 #define VulkanFatalLog(...) Logger::GetLogger()->LogMaster("Vulkan Fatal", __VA_ARGS__);
 #define WarningLog(...) Logger::GetLogger()->LogMaster("Warning", __VA_ARGS__);
 #define ErrorLog(...) Logger::GetLogger()->LogMaster("Error", __VA_ARGS__);
