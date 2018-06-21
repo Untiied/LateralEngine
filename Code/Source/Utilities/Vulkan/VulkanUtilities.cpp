@@ -14,7 +14,7 @@ VulkanUtilities::VulkanUtilities()
 	EnableValidation = false;
 #else
 	EnableValidation = true;
-	VulkanDebug = new VulkanDebugger();
+	VulkanDebug = new VulkanDebugger;
 #endif
 }
 

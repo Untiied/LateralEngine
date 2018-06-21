@@ -1,6 +1,7 @@
 #pragma once
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
+#include "../Utilities/Vulkan/VulkanUtilities.h"
 #include <vector>
 
 struct SwapchainSupportDetails {
@@ -19,8 +20,8 @@ public:
 			instance = new VulkanRenderer;
 		return instance;
 	}
+
 	VulkanRenderer();
-	//VulkanRenderer(class VulkanUtilities& VulkanUtils);
 	~VulkanRenderer();
 private:
 
@@ -63,7 +64,6 @@ private:
 	//Choose the swap capabilities of the resolution.
 	VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
 public:
-
 	//Starts the render processes.
 	void Initilize();
 
@@ -72,7 +72,15 @@ public:
 
 	//Actually draws the frame.
 	void Draw();
-
+private:
+	//Returns the singleton for the vulkan utilities.
+	inline VulkanUtilities* GetUtilities() {
+		return VulkanUtilities::GetInstance();
+	}
+	//Returns the logical device from the vulkan utilities.
+	inline VkDevice GetDevice() {
+		return VulkanUtilities::GetInstance()->VulkanDevice;
+	}
 protected:
 	VkSemaphore ImageAvailableSemaphore;
 	VkSemaphore RenderFinishedSemaphore;
@@ -89,5 +97,4 @@ protected:
 	VkSwapchainCreateInfoKHR VulkanSwapchainCreateInfo = {};
 	VkSwapchainKHR VulkanSwapchain = VK_NULL_HANDLE;
 	SwapchainSupportDetails VulkanSwapchainSupport;
-	class VulkanUtilities* VulkanBase;
 };

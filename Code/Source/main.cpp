@@ -32,6 +32,7 @@ int main() {
 		VulkanRenderer::GetInstance()->Draw();
 	}
 
-	//delete(&VkUtils);
+	delete(VulkanUtilities::GetInstance());
 	DispenseLog();
+	getchar();
 }

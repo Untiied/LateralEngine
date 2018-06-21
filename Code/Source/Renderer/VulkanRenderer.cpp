@@ -1,5 +1,4 @@
 #include "VulkanRenderer.h"
-#include "../Utilities/Vulkan/VulkanUtilities.h"
 #include "../Utilities/Log.h"
 #include "../Utilities/Globals.h"
 #include "Shader.h"
@@ -9,13 +8,8 @@ VulkanRenderer *VulkanRenderer::instance = 0;
 
 VulkanRenderer::VulkanRenderer()
 {
-	VulkanBase = VulkanUtilities::GetInstance();
-}
 
-//VulkanRenderer::VulkanRenderer(VulkanUtilities& VulkanUtils)
-//{
-//	VulkanBase = &VulkanUtils;
-//}
+}
 
 void VulkanRenderer::Initilize()
 {
@@ -40,7 +34,7 @@ void VulkanRenderer::CreateSwapchain()
 	VkExtent2D extent = chooseSwapExtent(swapChainSupport.capabilities);
 	
 	VulkanSwapchainCreateInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-	VulkanSwapchainCreateInfo.surface = VulkanBase->VulkanSurface;
+	VulkanSwapchainCreateInfo.surface = GetUtilities()->VulkanSurface;
 	
 	//You have to check the max amount of supported images for the swapchain.
 	uint32_t ImageCount = swapChainSupport.capabilities.minImageCount + 1;
@@ -63,16 +57,16 @@ void VulkanRenderer::CreateSwapchain()
 	//Set this to null because of when you need to reload the swapchain... basically allocate memory for it later.
 	VulkanSwapchainCreateInfo.oldSwapchain = VK_NULL_HANDLE;
 
-	VkResult result = vkCreateSwapchainKHR(VulkanBase->VulkanDevice, &VulkanSwapchainCreateInfo, nullptr, &VulkanSwapchain);
+	VkResult result = vkCreateSwapchainKHR(GetDevice(), &VulkanSwapchainCreateInfo, nullptr, &VulkanSwapchain);
 
 	if (result != VK_SUCCESS) 
 	{
 		VulkanFatalLog("Failed to create the Vulkan swapchain!")
 	}
 
-	vkGetSwapchainImagesKHR(VulkanBase->VulkanDevice, VulkanSwapchain, &ImageCount, nullptr);
+	vkGetSwapchainImagesKHR(GetDevice(), VulkanSwapchain, &ImageCount, nullptr);
 	SwapChainImages.resize(ImageCount);
-	vkGetSwapchainImagesKHR(VulkanBase->VulkanDevice, VulkanSwapchain, &ImageCount, SwapChainImages.data());
+	vkGetSwapchainImagesKHR(GetDevice(), VulkanSwapchain, &ImageCount, SwapChainImages.data());
 	
 	SwapchainExtent = extent;
 	SurfaceFormat = surfaceFormat.format;
@@ -102,7 +96,7 @@ void VulkanRenderer::CreateImageViews()
 		createInfo.subresourceRange.baseArrayLayer = 0;
 		createInfo.subresourceRange.layerCount = 1;
 
-		VkResult result = vkCreateImageView(VulkanBase->VulkanDevice, &createInfo, nullptr, &SwapChainImageViews[i]);
+		VkResult result = vkCreateImageView(GetDevice(), &createInfo, nullptr, &SwapChainImageViews[i]);
 		if(result != VK_SUCCESS)
 		{
 			VulkanFatalLog("Couldn't create an Vulkan image view for image: %i", i);
@@ -149,7 +143,7 @@ void VulkanRenderer::CreateRenderPass()
 	renderPassInfo.dependencyCount = 1;
 	renderPassInfo.pDependencies = &dependency;
 
-	VkResult result = vkCreateRenderPass(VulkanBase->VulkanDevice, &renderPassInfo, nullptr, &RenderPass);
+	VkResult result = vkCreateRenderPass(GetDevice(), &renderPassInfo, nullptr, &RenderPass);
 	if(result != VK_SUCCESS)
 	{
 		VulkanFatalLog("Couldn't create Vulkan render pass!");
@@ -159,7 +153,7 @@ void VulkanRenderer::CreateRenderPass()
 void VulkanRenderer::CreateRenderPipeline()
 {
 	//Fake creating a shader just for the Triangle render.
-	Shader shader(*VulkanBase);
+	Shader shader;
 
 	//We start to configure the graphics pipline... 
 	//Vertex -> Fragment -> etc.
@@ -244,7 +238,7 @@ void VulkanRenderer::CreateRenderPipeline()
 	pipelineLayoutInfo.setLayoutCount = 0;
 	pipelineLayoutInfo.pushConstantRangeCount = 0;
 
-	VkResult result = vkCreatePipelineLayout(VulkanBase->VulkanDevice, &pipelineLayoutInfo, nullptr, &PipelineLayout);
+	VkResult result = vkCreatePipelineLayout(GetDevice(), &pipelineLayoutInfo, nullptr, &PipelineLayout);
 	if(result != VK_SUCCESS)
 	{
 		VulkanFatalLog("Couldn't create the Vulkan graphics pipeline!")
@@ -268,7 +262,7 @@ void VulkanRenderer::CreateRenderPipeline()
 	pipelineInfo.basePipelineHandle = VK_NULL_HANDLE; // Optional
 	pipelineInfo.basePipelineIndex = -1; // Optional
 
-	VkResult result2 = vkCreateGraphicsPipelines(VulkanBase->VulkanDevice, NULL , 1, &pipelineInfo, NULL, &GraphicsPipeline);
+	VkResult result2 = vkCreateGraphicsPipelines(GetDevice(), NULL , 1, &pipelineInfo, NULL, &GraphicsPipeline);
 	if(result2 != VK_SUCCESS)
 	{
 		VulkanFatalLog("Couldn't create the Vulkan graphics pipeline!")
@@ -293,7 +287,7 @@ void VulkanRenderer::CreateFrameBuffers()
 		framebufferInfo.height = SwapchainExtent.height;
 		framebufferInfo.layers = 1;
 
-		VkResult result = vkCreateFramebuffer(VulkanBase->VulkanDevice, &framebufferInfo, nullptr, &SwapchainFramebuffers[i]);
+		VkResult result = vkCreateFramebuffer(GetDevice(), &framebufferInfo, nullptr, &SwapchainFramebuffers[i]);
 		if(result != VK_SUCCESS) {
 			VulkanFatalLog("Couldn't create the Vulkan frame buffer for image: %n", i);
 		}
@@ -302,14 +296,14 @@ void VulkanRenderer::CreateFrameBuffers()
 
 void VulkanRenderer::CreateCommandPool()
 {
-	QueueFamilyIndex queueFamilyIndices = VulkanBase->GetQueueFamily();
+	QueueFamilyIndex queueFamilyIndices = GetUtilities()->GetQueueFamily();
 
 	VkCommandPoolCreateInfo poolInfo = {};
 	poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
 	poolInfo.queueFamilyIndex = queueFamilyIndices.QueueID;
 	poolInfo.flags = 0; // Optional
 
-	VkResult result = vkCreateCommandPool(VulkanBase->VulkanDevice, &poolInfo, nullptr, &CommandPool);
+	VkResult result = vkCreateCommandPool(GetDevice(), &poolInfo, nullptr, &CommandPool);
 	if (result != VK_SUCCESS)
 	{
 		VulkanFatalLog("Couldn't create the Vulkan command pool!")
@@ -326,7 +320,7 @@ void VulkanRenderer::CreateCommandBuffers()
 	allocInfo.commandBufferCount = (uint32_t)CommandBuffers.size();
 
 
-	VkResult result = vkAllocateCommandBuffers(VulkanBase->VulkanDevice, &allocInfo, CommandBuffers.data());
+	VkResult result = vkAllocateCommandBuffers(GetDevice(), &allocInfo, CommandBuffers.data());
 	if (result != VK_SUCCESS) {
 		VulkanFatalLog("Couldn't allocate the commands to the Vulkan command buffers!")
 	}
@@ -337,7 +331,7 @@ void VulkanRenderer::CreateCommandBuffers()
 		beginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
 
 		if (vkBeginCommandBuffer(CommandBuffers[i], &beginInfo) != VK_SUCCESS) {
-			throw std::runtime_error("failed to begin recording command buffer!");
+			VulkanFatalLog("Couldn't begin recording Vulkan command buffer!");
 		}
 
 		VkRenderPassBeginInfo renderPassInfo = {};
@@ -370,8 +364,8 @@ void VulkanRenderer::CreateSyncObjects()
 {
 	VkSemaphoreCreateInfo semaphoreInfo = {};
 	semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
-	if (vkCreateSemaphore(VulkanBase->VulkanDevice, &semaphoreInfo, nullptr, &ImageAvailableSemaphore) != VK_SUCCESS ||
-		vkCreateSemaphore(VulkanBase->VulkanDevice, &semaphoreInfo, nullptr, &RenderFinishedSemaphore) != VK_SUCCESS) {
+	if (vkCreateSemaphore(GetDevice(), &semaphoreInfo, nullptr, &ImageAvailableSemaphore) != VK_SUCCESS ||
+		vkCreateSemaphore(GetDevice(), &semaphoreInfo, nullptr, &RenderFinishedSemaphore) != VK_SUCCESS) {
 		VulkanFatalLog("Couldn't create the Vulkan semaphores!");
 	}
 }
@@ -379,25 +373,25 @@ void VulkanRenderer::CreateSyncObjects()
 void VulkanRenderer::CleanupSwapchain()
 {
 	for (auto framebuffer : SwapchainFramebuffers) {
-		vkDestroyFramebuffer(VulkanBase->VulkanDevice, framebuffer, nullptr);
+		vkDestroyFramebuffer(GetDevice(), framebuffer, nullptr);
 	}
 
-	vkFreeCommandBuffers(VulkanBase->VulkanDevice, CommandPool, static_cast<uint32_t>(CommandBuffers.size()), CommandBuffers.data());
+	vkFreeCommandBuffers(GetDevice(), CommandPool, static_cast<uint32_t>(CommandBuffers.size()), CommandBuffers.data());
 
-	vkDestroyPipeline(VulkanBase->VulkanDevice, GraphicsPipeline, nullptr);
-	vkDestroyPipelineLayout(VulkanBase->VulkanDevice, PipelineLayout, nullptr);
-	vkDestroyRenderPass(VulkanBase->VulkanDevice, RenderPass, nullptr);
+	vkDestroyPipeline(GetDevice(), GraphicsPipeline, nullptr);
+	vkDestroyPipelineLayout(GetDevice(), PipelineLayout, nullptr);
+	vkDestroyRenderPass(GetDevice(), RenderPass, nullptr);
 
 	for (auto imageView : SwapChainImageViews) {
-		vkDestroyImageView(VulkanBase->VulkanDevice, imageView, nullptr);
+		vkDestroyImageView(GetDevice(), imageView, nullptr);
 	}
 
-	vkDestroySwapchainKHR(VulkanBase->VulkanDevice, VulkanSwapchain, nullptr);
+	vkDestroySwapchainKHR(GetDevice(), VulkanSwapchain, nullptr);
 }
 
 void VulkanRenderer::RecreateSwapchain()
 {
-	vkDeviceWaitIdle(VulkanBase->VulkanDevice);
+	vkDeviceWaitIdle(GetDevice());
 
 	CleanupSwapchain();
 
@@ -412,7 +406,7 @@ void VulkanRenderer::RecreateSwapchain()
 void VulkanRenderer::Draw()
 {
 	uint32_t imageIndex;
-	vkAcquireNextImageKHR(VulkanBase->VulkanDevice, VulkanSwapchain, std::numeric_limits<uint64_t>::max(), ImageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
+	vkAcquireNextImageKHR(GetDevice(), VulkanSwapchain, std::numeric_limits<uint64_t>::max(), ImageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
 
 	VkSubmitInfo submitInfo = {};
 	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -429,21 +423,12 @@ void VulkanRenderer::Draw()
 	submitInfo.signalSemaphoreCount = 1;
 	submitInfo.pSignalSemaphores = signalSemaphores;
 
-	if (vkQueueSubmit(VulkanBase->GraphicsQueue, 1, &submitInfo, VK_NULL_HANDLE) != VK_SUCCESS) {
+	if (vkQueueSubmit(GetUtilities()->GraphicsQueue, 1, &submitInfo, VK_NULL_HANDLE) != VK_SUCCESS) {
 		VulkanFatalLog("Couldn't submit Vulkan draw command buffers!");
 	}
 
-	VkSubpassDependency dependency = {};
-	dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
-	dependency.dstSubpass = 0;
-	dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-	dependency.srcAccessMask = 0;
-	dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-	dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-
 	VkPresentInfoKHR presentInfo = {};
 	presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-
 	presentInfo.waitSemaphoreCount = 1;
 	presentInfo.pWaitSemaphores = signalSemaphores;
 
@@ -451,9 +436,10 @@ void VulkanRenderer::Draw()
 	presentInfo.swapchainCount = 1;
 	presentInfo.pSwapchains = swapChains;
 	presentInfo.pImageIndices = &imageIndex;
-	presentInfo.pResults = nullptr; // Optional
 
-	vkQueuePresentKHR(VulkanBase->PresentQueue, &presentInfo);
+	vkQueuePresentKHR(GetUtilities()->PresentQueue, &presentInfo);
+
+	//vkQueueWaitIdle(GetUtilities()->PresentQueue);
 }
 
 VkExtent2D VulkanRenderer::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) {
@@ -505,22 +491,22 @@ SwapchainSupportDetails VulkanRenderer::QuerySwapchainSupport()
 {
 	SwapchainSupportDetails SwapDetails;
 
-	vkGetPhysicalDeviceSurfaceCapabilitiesKHR(VulkanBase->PhysicalDevice, VulkanBase->VulkanSurface, &SwapDetails.capabilities);
+	vkGetPhysicalDeviceSurfaceCapabilitiesKHR(GetUtilities()->PhysicalDevice, GetUtilities()->VulkanSurface, &SwapDetails.capabilities);
 
 	uint32_t formatCount;
-	vkGetPhysicalDeviceSurfaceFormatsKHR(VulkanBase->PhysicalDevice, VulkanBase->VulkanSurface, &formatCount, nullptr);
+	vkGetPhysicalDeviceSurfaceFormatsKHR(GetUtilities()->PhysicalDevice, GetUtilities()->VulkanSurface, &formatCount, nullptr);
 
 	if (formatCount != 0) {
 		SwapDetails.formats.resize(formatCount);
-		vkGetPhysicalDeviceSurfaceFormatsKHR(VulkanBase->PhysicalDevice, VulkanBase->VulkanSurface, &formatCount, SwapDetails.formats.data());
+		vkGetPhysicalDeviceSurfaceFormatsKHR(GetUtilities()->PhysicalDevice, GetUtilities()->VulkanSurface, &formatCount, SwapDetails.formats.data());
 	}
 
 	uint32_t presentModeCount;
-	vkGetPhysicalDeviceSurfacePresentModesKHR(VulkanBase->PhysicalDevice, VulkanBase->VulkanSurface, &presentModeCount, nullptr);
+	vkGetPhysicalDeviceSurfacePresentModesKHR(GetUtilities()->PhysicalDevice, GetUtilities()->VulkanSurface, &presentModeCount, nullptr);
 
 	if (presentModeCount != 0) {
 		SwapDetails.presentModes.resize(presentModeCount);
-		vkGetPhysicalDeviceSurfacePresentModesKHR(VulkanBase->PhysicalDevice, VulkanBase->VulkanSurface, &presentModeCount, SwapDetails.presentModes.data());
+		vkGetPhysicalDeviceSurfacePresentModesKHR(GetUtilities()->PhysicalDevice, GetUtilities()->VulkanSurface, &presentModeCount, SwapDetails.presentModes.data());
 	}
 
 	return SwapDetails;
@@ -528,21 +514,21 @@ SwapchainSupportDetails VulkanRenderer::QuerySwapchainSupport()
 
 VulkanRenderer::~VulkanRenderer()
 {
-	vkDestroySemaphore(VulkanBase->VulkanDevice, RenderFinishedSemaphore, nullptr);
-	vkDestroySemaphore(VulkanBase->VulkanDevice, ImageAvailableSemaphore, nullptr);
+	vkDestroySemaphore(GetDevice(), RenderFinishedSemaphore, nullptr);
+	vkDestroySemaphore(GetDevice(), ImageAvailableSemaphore, nullptr);
 
 	for (auto framebuffer : SwapchainFramebuffers) {
-		vkDestroyFramebuffer(VulkanBase->VulkanDevice, framebuffer, nullptr);
+		vkDestroyFramebuffer(GetDevice(), framebuffer, nullptr);
 	}
 
-	vkDestroyPipeline(VulkanBase->VulkanDevice, GraphicsPipeline, nullptr);
-	vkDestroyPipelineLayout(VulkanBase->VulkanDevice, PipelineLayout, nullptr);
-	vkDestroyRenderPass(VulkanBase->VulkanDevice, RenderPass, nullptr);
+	vkDestroyPipeline(GetDevice(), GraphicsPipeline, nullptr);
+	vkDestroyPipelineLayout(GetDevice(), PipelineLayout, nullptr);
+	vkDestroyRenderPass(GetDevice(), RenderPass, nullptr);
 
 	for (auto imageView : SwapChainImageViews) {
-		vkDestroyImageView(VulkanBase->VulkanDevice, imageView, nullptr);
+		vkDestroyImageView(GetDevice(), imageView, nullptr);
 	}
 
-	vkDestroySwapchainKHR(VulkanBase->VulkanDevice, VulkanSwapchain, nullptr);
+	vkDestroySwapchainKHR(GetDevice(), VulkanSwapchain, nullptr);
 }
 

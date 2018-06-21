@@ -6,14 +6,13 @@
 //Unlike opengl you dont need to store the strings... Just upload right to Vulkan.
 class Shader {
 public:
-	Shader(class VulkanUtilities& vkUtils);
+	Shader();
 	~Shader();
 
-	void LoadShader(class VulkanUtilities& vkUtils, const char* VertexShaderPath, const char* FragmentShaderPath);
+	void LoadShader(const char* VertexShaderPath, const char* FragmentShaderPath);
 
-	VkShaderModule CreateShaderModule(class VulkanUtilities& vkUtils, std::vector<char>& data);
+	VkShaderModule CreateShaderModule(std::vector<char>& data);
 public:
-	class VulkanUtilities* VulkanUtils;
 	VkShaderModule VertexShaderModule = VK_NULL_HANDLE;
 	VkShaderModule FragmentShaderModule = VK_NULL_HANDLE;
 };
