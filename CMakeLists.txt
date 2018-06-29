@@ -20,4 +20,5 @@ add_subdirectory(External/glm)
 
 add_executable(lateral ${sourceFiles} ${headerFiles})
 find_package(Vulkan REQUIRED)
+find_package(Opengl REQUIRED)
 target_link_libraries(lateral glfw glm Vulkan::Vulkan)

@@ -1,5 +1,4 @@
 #include "Window.h"
-#include "../Renderer/VulkanRenderer.h"
 #include "../Utilities/Input.h"
 #include "../Utilities/Log.h"
 
@@ -49,7 +48,7 @@ void ResizeCallback(GLFWwindow * window, int width, int height)
 	GlobalVariables::Window::width = width;
 	GlobalVariables::Window::height = height;
 
-	VulkanRenderer::GetInstance()->RecreateSwapchain();
+	//VulkanRenderer::GetInstance()->RecreateSwapchain();
 }
 
 void Window::CreateWindow()

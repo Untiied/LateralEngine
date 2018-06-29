@@ -8,6 +8,7 @@ namespace GlobalVariables{
 	
 	namespace Application {
 		const extern const char* EngineName;
+		extern const uint32_t EngineVersion;
 		extern const char* ApplicationName;
 	}
 

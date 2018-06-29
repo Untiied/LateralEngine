@@ -6,12 +6,12 @@
 #include "Log.h"
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
-#include "../Renderer/VulkanRenderer.h"
 
 namespace GlobalVariables {
 
 	namespace Application {
 		const const char* EngineName = "Lateral Engine";
+		const uint32_t EngineVersion = (0, 0, 2);
 		const char* ApplicationName;
 	}
 

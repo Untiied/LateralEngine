@@ -1,6 +1,6 @@
 #include "Shader.h"
-#include "../Utilities/Vulkan/VulkanUtilities.h"
 #include "../Utilities/Log.h"
+#include "VulkanRender.h"
 
 Shader::Shader()
 {
@@ -18,6 +18,7 @@ void Shader::LoadShader(const char* VertexShaderPath, const char* FragmentShader
 
 VkShaderModule Shader::CreateShaderModule(std::vector<char>& data)
 {
+	using namespace LateralEngine::Renderer;
 	VkShaderModule FuncMod;
 
 	VkShaderModuleCreateInfo ShaderCreationInfo = {};
@@ -25,18 +26,13 @@ VkShaderModule Shader::CreateShaderModule(std::vector<char>& data)
 	ShaderCreationInfo.codeSize = data.size();
 	ShaderCreationInfo.pCode = reinterpret_cast<uint32_t*>(data.data());
 
-	VkResult result = vkCreateShaderModule(VulkanUtilities::GetInstance()->VulkanDevice, &ShaderCreationInfo, nullptr, &FuncMod);
-	if(result != VK_SUCCESS)
-	{
-		Log("failed to create a Vulkan shader module!")
-		return nullptr;
-	}
+	vkCreateShaderModule(VulkanRenderer::GetInstance().GetDevice(), &ShaderCreationInfo, nullptr, &FuncMod);
 
 	return FuncMod;
 }
 
 Shader::~Shader()
 {
-	vkDestroyShaderModule(VulkanUtilities::GetInstance()->VulkanDevice, VertexShaderModule, nullptr);
-	vkDestroyShaderModule(VulkanUtilities::GetInstance()->VulkanDevice, FragmentShaderModule, nullptr);
+	//vkDestroyShaderModule(VulkanUtilities::GetInstance()->VulkanDevice, VertexShaderModule, nullptr);
+	//vkDestroyShaderModule(VulkanUtilities::GetInstance()->VulkanDevice, FragmentShaderModule, nullptr);
 }
