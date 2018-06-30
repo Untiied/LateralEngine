@@ -5,7 +5,7 @@
 
 namespace LateralEngine {
 	namespace Renderer {
-
+		namespace Vulkan {
 		struct SwapchainSupportDetails {
 			VkSurfaceCapabilitiesKHR capabilities;
 			std::vector<VkSurfaceFormatKHR> formats;
@@ -112,6 +112,6 @@ namespace LateralEngine {
 			std::vector<VkImage> swapchainImages;
 			std::vector<VkImageView> swapchainImageViews;
 		};
-
+		}
 	}
 }

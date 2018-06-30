@@ -1,6 +1,4 @@
 #pragma once
-#define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
 #include <string>
 #include <vector>
 
@@ -22,5 +20,6 @@ namespace GlobalVariables{
 
 namespace Utils {
 	extern const std::string currentDateTime();
-	extern const std::vector<char> readFile(const char* path);
+	extern const std::vector<char> readVulkanShader(const char* path);
+	extern const std::string readFile(const char* path);
 }

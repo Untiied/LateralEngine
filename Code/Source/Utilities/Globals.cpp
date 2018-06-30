@@ -4,7 +4,7 @@
 #include <string>
 #include <fstream>
 #include "Log.h"
-#define GLFW_INCLUDE_VULKAN
+#define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
 namespace GlobalVariables {
@@ -37,7 +37,7 @@ namespace Utils {
 		return buf;
 	}
 
-	const std::vector<char> readFile(const char * path)
+	const std::vector<char> readVulkanShader(const char * path)
 	{	
 		std::ifstream inFile(path, std::ios::ate | std::ios::binary);
 
@@ -53,5 +53,14 @@ namespace Utils {
 		inFile.close();
 
 		return funcString;
+	}
+
+	const std::string readFile(const char * path)
+	{
+		std::string s(std::istreambuf_iterator<char>(std::ifstream(path)
+			>> std::skipws),
+			std::istreambuf_iterator<char>());
+
+		return s;
 	}
 }

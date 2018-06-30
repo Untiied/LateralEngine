@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <set>
 
-using namespace LateralEngine::Renderer;
+using namespace LateralEngine::Renderer::Vulkan;
 VulkanResearcher::VulkanResearcher()
 {
 #ifdef NDEBUG

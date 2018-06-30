@@ -4,7 +4,7 @@
 #include "Shader.h"
 #include <algorithm>
 
-using namespace LateralEngine::Renderer;
+using namespace LateralEngine::Renderer::Vulkan;
 VulkanRenderer *VulkanRenderer::instance = 0;
 
 VulkanRenderer::VulkanRenderer() {

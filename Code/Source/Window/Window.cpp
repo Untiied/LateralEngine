@@ -1,6 +1,8 @@
 #include "Window.h"
 #include "../Utilities/Input.h"
 #include "../Utilities/Log.h"
+#include "../glad/glad.h"
+#include "../Renderer/OpenglRenderer.h"
 
 namespace LateralEngine{
 
@@ -31,6 +33,16 @@ void Window::Show()
 	glfwShowWindow(m_Window);
 }
 
+void Window::LockCursor()
+{
+	glfwSetInputMode(GetWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+}
+
+void Window::UnlockCursor()
+{
+	glfwSetInputMode(GetWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+}
+
 void Window::Update() 
 {
 	glfwPollEvents();
@@ -48,12 +60,11 @@ void ResizeCallback(GLFWwindow * window, int width, int height)
 	GlobalVariables::Window::width = width;
 	GlobalVariables::Window::height = height;
 
-	//VulkanRenderer::GetInstance()->RecreateSwapchain();
+	LateralEngine::Rendering::Opengl::OpenglRenderer::GetInstance()->UpdateViewPort();
 }
 
 void Window::CreateWindow()
 {
-	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 	m_Window = glfwCreateWindow(GlobalVariables::Window::width, GlobalVariables::Window::height, GlobalVariables::Application::ApplicationName, nullptr, nullptr);
 	glfwSetCursorPosCallback(m_Window, &Input::UpdateMousePosition);
 	glfwSetMouseButtonCallback(m_Window, &Input::UpdateMouseButton);
@@ -61,6 +72,9 @@ void Window::CreateWindow()
 	glfwSetKeyCallback(m_Window, &Input::UpdateKey);
 	glfwSetWindowAttrib(m_Window, GLFW_AUTO_ICONIFY, true);
 	glfwSetWindowAttrib(m_Window, GLFW_RESIZABLE, true);
+
+	glfwMakeContextCurrent(GetWindow());
+	gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 	Log("Window creation successful!")
 }
 
