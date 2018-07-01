@@ -34,6 +34,10 @@ namespace LateralEngine {
 			vertices.push_back(funcVer);
 		}
 
+		inline void AddVertex(Vertex vert) {
+			vertices.push_back(vert);
+		}
+
 		inline void AddIndice(USHORT index) {
 			indices.push_back(index);
 		}

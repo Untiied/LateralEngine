@@ -3,9 +3,17 @@
 #include "../glad/glad.h"
 
 using namespace LateralEngine::Rendering;
-Shader::Shader()
+Shader::Shader(std::string VertexPath, std::string FragmentPath)
 {
-	LoadShader("A:/lateralEngine/lateral/Code/Source/Shaders/BasicVertex.vs","A:/lateralEngine/lateral/Code/Source/Shaders/BasicFrag.fs");
+	if (VertexPath == "" || FragmentPath == "") 
+	{
+		LoadShader("A:/lateralEngine/lateral/Code/Source/Shaders/BasicVertex.vs", "A:/lateralEngine/lateral/Code/Source/Shaders/BasicFrag.fs");
+	}
+	else
+	{
+		LoadShader(VertexPath.c_str(), FragmentPath.c_str());
+	}
+	
 }
 
 void Shader::LoadShader(const char* VertexShaderPath, const char* FragmentShaderPath)

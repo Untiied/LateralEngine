@@ -13,6 +13,7 @@ float returnNumber() {
 
 void Chunk::GenerateChunk()
 {
+	transform.setLocation(glm::vec3(100, 10, 1));
 	int x = 0;
 	int y = 0;
 	int z = 0;
@@ -26,8 +27,18 @@ void Chunk::GenerateChunk()
 				cube.GenerateBuffers();
 				cube.transform.setLocation(glm::vec3(x, y, z));
 				cube.transform.setColor(glm::vec3(returnNumber(), returnNumber(), returnNumber()));
+				cube.transform.SetParent(&this->transform);
 				ChunkCubes.push_back(cube);
 			}
+		}
+	}
+}
+
+void Chunk::GreedyMesh()
+{
+	for each(Cube var in ChunkCubes) {
+		for each (Vertex vert in var.vertices) {
+			AddVertex(vert);
 		}
 	}
 }

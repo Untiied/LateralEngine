@@ -33,6 +33,9 @@ public:
 
 	void setColor(glm::vec3 Color);
 	void addColor(glm::vec3 Color);
+	inline glm::vec3 getColor() {
+		return Color;
+	}
 
 	inline glm::vec3 getLocation() { return getTransformInfo(Position).translation; }
 	inline glm::vec3 getScale() { return getTransformInfo(Scale).scale; }
@@ -43,13 +46,32 @@ public:
 												glm::decompose(input, returnTrans.scale, returnTrans.rotation, returnTrans.translation, returnTrans.skew, returnTrans.perspective); 
 												returnTrans.rotation = glm::conjugate(returnTrans.rotation);
 												return returnTrans; };
-	inline glm::mat4 GetModel() {
-		return Rotation * Position * Scale;
+	inline glm::mat4 GetLocalModel() {
+		return  Position * Rotation * Scale;
 	}
-public:
+	
+	//inline glm::mat4 GetWorldModel() {
+	//	if ((unsigned long long)parent != 0xcccccccccccccccc) {
+	//		auto test = parent->GetLocalModel() * GetLocalModel();
+	//		return parent->GetLocalModel() * GetLocalModel();
+	//	}
+	//	return GetLocalModel();
+
+	//}
+	inline glm::mat4 GetWorldModel(Transform* tform) {
+		return tform->GetLocalModel() * GetLocalModel();
+	}
+
+	inline void SetParent(Transform* funcParent) {
+		parent = funcParent;
+		funcParent->child = this;
+	}
+private:
 	glm::mat4 Rotation = glm::mat4(1.0f);
 	glm::mat4 Position = glm::mat4(1.0f);
 	glm::mat4 Scale = glm::mat4(1.0f);
 	glm::vec3 Color = glm::vec3(1.0f);
+	Transform* parent;
+	Transform* child;
 };
 

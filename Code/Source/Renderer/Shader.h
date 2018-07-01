@@ -10,7 +10,7 @@ namespace LateralEngine {
 	namespace Rendering {
 		class Shader {
 		public:
-			Shader();
+			Shader(std::string VertexPath = "", std::string FragmentPath = "");
 			~Shader();
 
 			void LoadShader(const char* VertexShaderPath, const char* FragmentShaderPath);

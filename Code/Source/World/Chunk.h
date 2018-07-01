@@ -12,7 +12,11 @@ namespace LateralEngine {
 		
 			void GenerateChunk();
 
+			void GreedyMesh();
+		public:
+			Transform transform;
 			std::vector<Cube> ChunkCubes;
+			bool visible = true;
 		};
 	}
 }

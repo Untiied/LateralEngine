@@ -10,6 +10,7 @@
 #include "Renderer/Camera.h"
 #include <stdlib.h>
 #include <time.h>
+
 class AppClass : public Engine
 {
 	LateralEngine::Rendering::Shader instanceShader;
@@ -17,6 +18,7 @@ class AppClass : public Engine
 	LateralEngine::Rendering::Camera* camera;
 	void init() override {
 		Input::window = GameWindow->GetWindow();
+		instanceShader.LoadShader("A:/lateralEngine/lateral/Code/Source/Shaders/CubeVertex.vs", "A:/lateralEngine/lateral/Code/Source/Shaders/CubeFrag.fs");
 		camera = new LateralEngine::Rendering::Camera(glm::vec3(0, 0, 0), glm::radians(90.0f), GlobalVariables::Window::width / GlobalVariables::Window::height, .01f, 1000);
 		GameWindow->LockCursor();
 		LateralEngine::Rendering::Chunk chunk;
@@ -61,31 +63,10 @@ class AppClass : public Engine
 	void render() override {
 		using namespace LateralEngine::Rendering::Opengl;
 		OpenglRenderer::GetInstance()->Clear();
-
 		for each (LateralEngine::Rendering::Chunk chunk in Chunks)
 		{
-			//for each (LateralEngine::Rendering::Cube cube in chunk.ChunkCubes)
-			//{
-			//	cube.shader.Bind();
-			//	auto test = cube.transform.GetModel();
-			//	cube.shader.setMat4("Model", cube.transform.GetModel());
-			//	cube.shader.setMat4("View", camera->GetViewProjection());
-			//	cube.shader.setMat4("Projection", camera->GetPerspective());
-			//	glBindVertexArray(cube.GetBinding());
-			//	glDrawElements(GL_TRIANGLES, cube.indices.size(), GL_UNSIGNED_SHORT, 0);
-			//}
-			for (size_t i = 0; i < chunk.ChunkCubes.size(); i+=4)
-			{
-					chunk.ChunkCubes[i].shader.Bind();
-					chunk.ChunkCubes[i].shader.setMat4("Model", chunk.ChunkCubes[i].transform.GetModel());
-					chunk.ChunkCubes[i].shader.setMat4("View", camera->GetViewProjection());
-					chunk.ChunkCubes[i].shader.setMat4("Projection", camera->GetPerspective());
-					chunk.ChunkCubes[i].shader.setVec3("inColor", chunk.ChunkCubes[i].transform.Color);
-					glBindVertexArray(chunk.ChunkCubes[i].GetBinding());
-					glDrawElements(GL_TRIANGLES, chunk.ChunkCubes[i].indices.size(), GL_UNSIGNED_SHORT, 0);
-			}
+			OpenglRenderer::GetInstance()->DrawChunk(&chunk, camera, &instanceShader);
 		}
-
 		OpenglRenderer::GetInstance()->Swap(GameWindow);
 	}
 
