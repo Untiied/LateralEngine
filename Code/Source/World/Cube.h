@@ -1,6 +1,7 @@
 #pragma once
 #include "../Renderer/IMesh.h"
 #include "../Renderer/Shader.h"
+#include "Transform.h"
 
 namespace LateralEngine {
 	namespace Rendering {
@@ -11,10 +12,14 @@ namespace LateralEngine {
 				 ~Cube();
 
 				 void GenerateBuffers();
+				 inline unsigned int GetBinding() {
+					 return vao;
+				 }
 			 public:
 				Shader shader;
+				Transform transform;
+			private:
 				unsigned int vao, vbo, ebo;
-				glm::mat4 cubepos = glm::mat4(1.0f);
 			};
 	}
 }

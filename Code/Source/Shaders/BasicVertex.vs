@@ -6,7 +6,10 @@ uniform mat4 Model;
 uniform mat4 View;
 uniform mat4 Projection;
 
+uniform vec3 inColor;
+out vec3 outColor;
 void main()
 {
-    gl_Position = Projection * View * Model * vec4(aPos, 1.0f);
+    gl_Position = Projection * View * Model * vec4((aPos + vec3(gl_InstanceID, gl_InstanceID, gl_InstanceID)), 1.0f);
+    outColor = inColor;
 }

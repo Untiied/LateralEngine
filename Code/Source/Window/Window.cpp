@@ -50,8 +50,8 @@ void Window::Update()
 
 void Window::PopulateConfig()
 {
-	GlobalVariables::Window::width = 500;
-	GlobalVariables::Window::height = 500;
+	GlobalVariables::Window::width = 1280;
+	GlobalVariables::Window::height = 720;
 	GlobalVariables::Application::ApplicationName = "Lateral -- Test";
 }
 
