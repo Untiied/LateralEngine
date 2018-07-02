@@ -1,7 +1,7 @@
 #include "Transform.h"
 Transform::Transform()
 {
-	setLocation(glm::vec3(1, 1, 1));
+	//setLocation(glm::vec3(1, 1, 1));
 }
 
 Transform::~Transform()
