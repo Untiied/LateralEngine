@@ -25,10 +25,10 @@ void Chunk::GenerateChunk()
 			{
 				Cube cube;
 				cube.GenerateBuffers();
-				cube.transform.setLocation(glm::vec3(x, y, z));
-				cube.transform.setColor(glm::vec3(returnNumber(), returnNumber(), returnNumber()));
+				cube.transform->setLocation(glm::vec3(x, y, z));
+				cube.transform->setColor(glm::vec3(returnNumber(), returnNumber(), returnNumber()));
+				cube.transform->SetParent(this->transform);
 				ChunkCubes.push_back(cube);
-				cube.transform.SetParent(this->transform);
 			}
 		}
 	}
@@ -45,7 +45,4 @@ void Chunk::GreedyMesh()
 
 Chunk::~Chunk()
 {
-	//for each (Cube var in ChunkCubes) {
-	//	delete(&var);
-	//}
 }

@@ -15,6 +15,7 @@
 #include "imgui/imgui_impl_opengl3.h"
 #include "Utilities/Log.h"
 #include "World/ChunkManager.h"
+#include <memory>
 
 class AppClass : public Engine
 {

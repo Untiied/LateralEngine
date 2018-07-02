@@ -14,7 +14,7 @@ namespace LateralEngine {
 
 			void GreedyMesh();
 		public:
-			Transform transform;
+			std::shared_ptr<Transform> transform = std::make_shared<Transform>();
 			std::vector<Cube> ChunkCubes;
 			bool visible = true;
 		};

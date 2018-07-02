@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
+#include <memory>
 
 struct TransformReturn {
 	glm::vec3 scale = glm::vec3();
@@ -52,24 +53,25 @@ public:
 	}
 	
 	inline glm::mat4 GetWorldModel() {
+		if(parent != nullptr)
 			return parent->GetLocalModel() * GetLocalModel();
-		//return GetLocalModel();
+		return GetLocalModel();
 	}
 
 	inline glm::mat4 GetWorldModel(Transform* tform) {
 		return tform->GetLocalModel() * GetLocalModel();
 	}
 
-	inline void SetParent(Transform funcParent) {
-		parent = &funcParent;
-		funcParent.child = this;
+	inline void SetParent(std::shared_ptr<Transform> funcParent) {
+		parent = funcParent;
+		//funcParent->child = this;
 	}
 private:
 	glm::mat4 Rotation = glm::mat4(1.0f);
 	glm::mat4 Position = glm::mat4(1.0f);
 	glm::mat4 Scale = glm::mat4(1.0f);
 	glm::vec3 Color = glm::vec3(1.0f);
-	Transform*& parent;
-	Transform*& child;
+	std::shared_ptr<Transform> parent;
+	Transform* child;
 };
 

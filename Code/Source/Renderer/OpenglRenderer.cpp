@@ -24,9 +24,8 @@ void OpenglRenderer::DrawChunk(LateralEngine::Rendering::Chunk* chunk, LateralEn
 			shader->Bind();
 			shader->setMat4("View", camera->GetViewProjection());
 			shader->setMat4("Projection", camera->GetPerspective());
-			//shader->setMat4("Model", chunk->ChunkCubes[i].transform.GetWorldModel(&chunk->transform));
-			shader->setMat4("Model", chunk->ChunkCubes[i].transform.GetWorldModel());
-			shader->setVec3("inColor", chunk->ChunkCubes[i].transform.getColor());
+			shader->setMat4("Model", chunk->ChunkCubes[i].transform->GetWorldModel());
+			shader->setVec3("inColor", chunk->ChunkCubes[i].transform->getColor());
 			glBindVertexArray(chunk->ChunkCubes[i].GetBinding());
 			glDrawElements(GL_TRIANGLES, chunk->ChunkCubes[i].indices.size(), GL_UNSIGNED_SHORT, 0);
 			//glDrawElementsInstanced(GL_TRIANGLES, chunk->ChunkCubes[i].indices.size(), GL_UNSIGNED_SHORT, 0, 10000);

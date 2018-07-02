@@ -2,6 +2,7 @@
 #include "../Renderer/IMesh.h"
 #include "../Renderer/Shader.h"
 #include "Transform.h"
+#include <memory>
 
 namespace LateralEngine {
 	namespace Rendering {
@@ -17,7 +18,7 @@ namespace LateralEngine {
 				 }
 			 public:
 				Shader shader;
-				Transform transform;
+				std::shared_ptr<Transform> transform = std::make_shared<Transform>();
 			private:
 				unsigned int vao, vbo, ebo;
 			};
