@@ -23,6 +23,7 @@ public:
 	void addLocation(glm::vec3 Location);
 	void addLocation(float x, float y, float z);
 	void setLocation(glm::vec3 Location);
+	void setLocation(float x, float y, float z);
 
 	void addRotation(float angle, glm::vec3 Rotation);
 	void setRotation(float angle, glm::vec3 Rotation);
@@ -50,28 +51,25 @@ public:
 		return  Position * Rotation * Scale;
 	}
 	
-	//inline glm::mat4 GetWorldModel() {
-	//	if ((unsigned long long)parent != 0xcccccccccccccccc) {
-	//		auto test = parent->GetLocalModel() * GetLocalModel();
-	//		return parent->GetLocalModel() * GetLocalModel();
-	//	}
-	//	return GetLocalModel();
+	inline glm::mat4 GetWorldModel() {
+			return parent->GetLocalModel() * GetLocalModel();
+		//return GetLocalModel();
+	}
 
-	//}
 	inline glm::mat4 GetWorldModel(Transform* tform) {
 		return tform->GetLocalModel() * GetLocalModel();
 	}
 
-	inline void SetParent(Transform* funcParent) {
-		parent = funcParent;
-		funcParent->child = this;
+	inline void SetParent(Transform funcParent) {
+		parent = &funcParent;
+		funcParent.child = this;
 	}
 private:
 	glm::mat4 Rotation = glm::mat4(1.0f);
 	glm::mat4 Position = glm::mat4(1.0f);
 	glm::mat4 Scale = glm::mat4(1.0f);
 	glm::vec3 Color = glm::vec3(1.0f);
-	Transform* parent;
-	Transform* child;
+	Transform*& parent;
+	Transform*& child;
 };
 

@@ -19,22 +19,13 @@ void OpenglRenderer::Swap(LateralEngine::Window* window)
 
 void OpenglRenderer::DrawChunk(LateralEngine::Rendering::Chunk* chunk, LateralEngine::Rendering::Camera* camera, LateralEngine::Rendering::Shader* shader)
 {
-		//for each (LateralEngine::Rendering::Cube cube in chunk.ChunkCubes)
-		//{
-		//	cube.shader.Bind();
-		//	auto test = cube.transform.GetModel();
-		//	cube.shader.setMat4("Model", cube.transform.GetModel());
-		//	cube.shader.setMat4("View", camera->GetViewProjection());
-		//	cube.shader.setMat4("Projection", camera->GetPerspective());
-		//	glBindVertexArray(cube.GetBinding());
-		//	glDrawElements(GL_TRIANGLES, cube.indices.size(), GL_UNSIGNED_SHORT, 0);
-		//}
 		for (size_t i = 0; i < chunk->ChunkCubes.size(); i++)
 		{
 			shader->Bind();
 			shader->setMat4("View", camera->GetViewProjection());
 			shader->setMat4("Projection", camera->GetPerspective());
-			shader->setMat4("Model", chunk->ChunkCubes[i].transform.GetWorldModel(&chunk->transform));
+			//shader->setMat4("Model", chunk->ChunkCubes[i].transform.GetWorldModel(&chunk->transform));
+			shader->setMat4("Model", chunk->ChunkCubes[i].transform.GetWorldModel());
 			shader->setVec3("inColor", chunk->ChunkCubes[i].transform.getColor());
 			glBindVertexArray(chunk->ChunkCubes[i].GetBinding());
 			glDrawElements(GL_TRIANGLES, chunk->ChunkCubes[i].indices.size(), GL_UNSIGNED_SHORT, 0);

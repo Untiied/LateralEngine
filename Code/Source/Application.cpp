@@ -10,11 +10,17 @@
 #include "Renderer/Camera.h"
 #include <stdlib.h>
 #include <time.h>
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
+#include "Utilities/Log.h"
+#include "World/ChunkManager.h"
 
 class AppClass : public Engine
 {
 	LateralEngine::Rendering::Shader instanceShader;
 	std::vector<LateralEngine::Rendering::Chunk> Chunks;
+	LateralEngine::Rendering::ChunkManager ChunkMan;
 	LateralEngine::Rendering::Camera* camera;
 	void init() override {
 		Input::window = GameWindow->GetWindow();
@@ -26,12 +32,36 @@ class AppClass : public Engine
 		//glCullFace(GL_FRONT);
 		//glEnable(GL_CULL_FACE);
 		srand(time(NULL));
+		initImGui();
+	}
+
+	void initImGui() {
+		ImGui::CreateContext();
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		ImGui_ImplGlfw_InitForOpenGL(GameWindow->GetWindow(), false);
+		ImGui_ImplOpenGL3_Init();
+
+		ImGui::StyleColorsDark();
+	}
+
+	void ImguiBegin() {
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+	}
+
+	void ImguiEnd() {
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 
 	bool MouseLocked = true;
 	bool WireFrame = false;
 	void update() override {
-		camera->Update();
+		ImguiBegin();
+		if (MouseLocked) {
+			camera->Update();
+		}
 		camera->freeCamera();
 		if (Input::GetKey(KeyCode::ESC)) {
 			GameWindow->Close();
@@ -58,17 +88,25 @@ class AppClass : public Engine
 				WireFrame = false;
 			}
 		}
+		ChunkMan.GenerateChunks(camera->m_position);
 	}
 
 	void render() override {
 		using namespace LateralEngine::Rendering::Opengl;
+
 		OpenglRenderer::GetInstance()->Clear();
-		for each (LateralEngine::Rendering::Chunk chunk in Chunks)
+
+		for (size_t i = 0; i < Chunks.size(); i++)
 		{
-			OpenglRenderer::GetInstance()->DrawChunk(&chunk, camera, &instanceShader);
+			OpenglRenderer::GetInstance()->DrawChunk(&Chunks[i], camera, &instanceShader);
 		}
+
+		ImGui::Text("Chunk Position: %i, %i", ChunkMan.WorldToChunkPosition(camera->m_position).first, ChunkMan.WorldToChunkPosition(camera->m_position).second);
+		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+
+		ImguiEnd();
 		OpenglRenderer::GetInstance()->Swap(GameWindow);
-	}
+		}
 
 	void end() override {
 		DispenseLog();

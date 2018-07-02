@@ -1,5 +1,4 @@
 #include "Transform.h"
-
 Transform::Transform()
 {
 	setLocation(glm::vec3(1, 1, 1));
@@ -27,6 +26,11 @@ void Transform::addLocation(float x, float y, float z)
 void Transform::setLocation(glm::vec3 Location)
 {
 	Position = glm::translate(glm::mat4(1.0f), Location);
+}
+
+void Transform::setLocation(float x, float y, float z)
+{
+	Position = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, z));
 }
 
 void Transform::addRotation(float angle, glm::vec3 Rotation)
