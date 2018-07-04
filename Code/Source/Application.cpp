@@ -16,6 +16,15 @@
 #include "Utilities/Log.h"
 #include "World/ChunkManager.h"
 #include <memory>
+#include <thread>
+
+void tfunc(LateralEngine::Rendering::ChunkManager* chunkManager, LateralEngine::Rendering::Camera* camera, LateralEngine::Window* window)
+{
+	while (true)
+	{
+		chunkManager->Update(camera->m_position);
+	}
+}
 
 class AppClass : public Engine
 {
@@ -25,7 +34,7 @@ class AppClass : public Engine
 	void init() override {
 		Input::window = GameWindow->GetWindow();
 		instanceShader.LoadShader("A:/lateralEngine/lateral/Code/Source/Shaders/CubeVertex.vs", "A:/lateralEngine/lateral/Code/Source/Shaders/CubeFrag.fs");
-		camera = new LateralEngine::Rendering::Camera(glm::vec3(0, 0, 0), glm::radians(70.0f), GlobalVariables::Window::width / GlobalVariables::Window::height, .01f, 1000);
+		camera = new LateralEngine::Rendering::Camera(glm::vec3(0, 16, 0), glm::radians(70.0f), GlobalVariables::Window::width / GlobalVariables::Window::height, .01f, 1000);
 		GameWindow->LockCursor();
 		srand(time(NULL));
 		initImGui();
@@ -33,6 +42,8 @@ class AppClass : public Engine
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
+		std::thread t(&tfunc, &chunkManager, camera, GameWindow);
+		t.detach();
 	}
 
 	void initImGui() {
@@ -60,6 +71,7 @@ class AppClass : public Engine
 	}
 	bool MouseLocked = true;
 	bool WireFrame = false;
+
 	void update() override {
 		CalculateDeltaTime();
 		ImguiBegin();
@@ -92,12 +104,14 @@ class AppClass : public Engine
 				WireFrame = false;
 			}
 		}
-		chunkManager.WorldToChunkPosition(camera->m_position);
-		chunkManager.Update(camera->m_position);
+
 	}
 
 	void render() override {
 		using namespace LateralEngine::Rendering::Opengl;
+
+		if(chunkManager.IsRenderReady())
+			chunkManager.UpdateOpenglStuff();
 
 		OpenglRenderer::GetInstance()->Clear();
 
@@ -106,16 +120,11 @@ class AppClass : public Engine
 		ImGui::Text("Chunk Position: %i, %i", chunkManager.WorldToChunkPosition(camera->m_position).first, chunkManager.WorldToChunkPosition(camera->m_position).second);
 		ImGui::Text("Camera Position: %i, %i, %i", (int)round(camera->m_position.x), (int)round(camera->m_position.y), (int)round(camera->m_position.z));
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-		ImGui::SliderFloat("Camera speed: ", &camera->speed, 0, 10);
+		ImGui::SliderFloat("Camera speed: ", &camera->speed, 0, 100);
 		if(ImGui::Button("Reset Camera", ImVec2(100, 30)))
 		{
 			camera->m_position = glm::vec3(0, 16, 0);
 		}
-		//if (ImGui::Button("test", ImVec2(100, 20)))
-		//{
-		//	chunkManager.allChunks[0].Move(0, chunkManager.allChunks[0].OneChunk + 2, 0);
-		//	chunkManager.UpdateTuple();
-		//}
 
 		ImguiEnd();
 		OpenglRenderer::GetInstance()->Swap(GameWindow);

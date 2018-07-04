@@ -23,6 +23,7 @@ namespace LateralEngine {
 			std::shared_ptr<Transform> transform = std::make_shared<Transform>();
 			std::vector<Cube> ChunkCubes;
 			bool visible = true;
+			bool updateRender = false;
 			float OneChunk = 16;
 			glm::vec2 ChunkFormationPosition;
 		};

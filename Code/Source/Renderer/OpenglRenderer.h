@@ -7,10 +7,10 @@
 #include "../World/Cube.h"
 #include "glm/glm.hpp"
 #include "../Utilities/Globals.h"
-#include "../World/ChunkManager.h"
 
 namespace LateralEngine {
 	namespace Rendering {
+		class ChunkManager;
 		namespace Opengl {
 			class OpenglRenderer {
 			public:

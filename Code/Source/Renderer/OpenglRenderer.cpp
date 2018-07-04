@@ -1,6 +1,7 @@
 #include "OpenglRenderer.h"
 #include "../glad/glad.h"
 #include "../Utilities/Input.h"
+#include "../World/ChunkManager.h"
 
 using namespace LateralEngine::Rendering::Opengl;
 OpenglRenderer* OpenglRenderer::instance = 0;
@@ -18,12 +19,15 @@ void OpenglRenderer::Swap(LateralEngine::Window* window)
 int test = 0;
 void OpenglRenderer::DrawChunk(LateralEngine::Rendering::ChunkManager* chunkManager, LateralEngine::Rendering::Camera* camera, LateralEngine::Rendering::Shader* shader)
 {
-	shader->Bind();
-	shader->setMat4("View", camera->GetViewProjection());
-	shader->setMat4("Projection", camera->GetPerspective());
-	glBindVertexArray(chunkManager->instanceTuple.vao);
-	//auto test = chunkManager->rankedChunks.find(std::make_pair(1, 1))->second.ChunkCubes[0].indices.size();
-	glDrawElementsInstanced(GL_TRIANGLES,38 , GL_UNSIGNED_SHORT, 0, chunkManager->instanceTuple.amount);
+	if (chunkManager->rankedChunks.size() != 0)
+	{
+		shader->Bind();
+		shader->setMat4("View", camera->GetViewProjection());
+		shader->setMat4("Projection", camera->GetPerspective());
+		glBindVertexArray(chunkManager->instanceTuple.vao);
+		//auto test = chunkManager->rankedChunks.find(std::make_pair(1, 1))->second.ChunkCubes[0].indices.size();
+		glDrawElementsInstanced(GL_TRIANGLES,38 , GL_UNSIGNED_SHORT, 0, chunkManager->instanceTuple.amount);
+	}
 }
 
 
