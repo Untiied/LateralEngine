@@ -21,6 +21,8 @@ namespace LateralEngine{
 
 		void UnlockCursor();
 
+		void ResetCursor();
+
 		void Update();
 
 		GLFWwindow* GetWindow() const { return m_Window; };

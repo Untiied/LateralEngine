@@ -55,12 +55,24 @@ namespace Utils {
 		return funcString;
 	}
 
-	const std::string readFile(const char * path)
+	const std::string readFile(std::string path)
 	{
+			if(path.find('/') == std::string::npos )
+			{
+				Log("Reading file: %s uses '/'... Terminated search", path.c_str());
+				return std::string();
+			}
 		std::string s(std::istreambuf_iterator<char>(std::ifstream(path)
 			>> std::skipws),
 			std::istreambuf_iterator<char>());
 
 		return s;
 	}
+}
+
+namespace Time
+{
+	float deltaTime = 0;
+	float oldTime = 0;
+	float newTime = 0;
 }

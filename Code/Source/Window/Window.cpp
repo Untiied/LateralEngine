@@ -36,11 +36,17 @@ void Window::Show()
 void Window::LockCursor()
 {
 	glfwSetInputMode(GetWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	ResetCursor();
 }
 
 void Window::UnlockCursor()
 {
 	glfwSetInputMode(GetWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+}
+
+void Window::ResetCursor()
+{
+	glfwSetCursorPos(GetWindow(), GlobalVariables::Window::width / 2, GlobalVariables::Window::height / 2);
 }
 
 void Window::Update() 

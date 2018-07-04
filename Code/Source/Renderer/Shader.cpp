@@ -16,7 +16,7 @@ Shader::Shader(std::string VertexPath, std::string FragmentPath)
 	
 }
 
-void Shader::LoadShader(const char* VertexShaderPath, const char* FragmentShaderPath)
+void Shader::LoadShader(std::string VertexShaderPath, std::string FragmentShaderPath)
 {
 	const char* shaderLoadedChar;
 

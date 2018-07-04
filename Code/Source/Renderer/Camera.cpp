@@ -13,8 +13,6 @@ Camera::Camera(glm::vec3 pos, float fov, float aspect, float znear, float zfar) 
 	m_up = glm::vec3(0.0f, 1.0f, 0.0f);
 	middle.x = GlobalVariables::Window::width / 2.0f;
 	middle.y = GlobalVariables::Window::height / 2.0f;
-
-	//glfwSetCursorPos(Input::window, middle.x, middle.y);
 }
 
 glm::mat4 Camera::GetViewProjection() {
@@ -28,7 +26,7 @@ void Camera::mouseupdate(glm::vec2& MousePosition) {
 	if (MousePosition != glm::vec2(0.0f)) {
 		horizMovement = (MousePosition.x - middle.x) * MouseSensitivity;
 		vertMovement = (MousePosition.y - middle.y) * MouseSensitivity;
-		vertMovement = glm::clamp(vertMovement, -89.f, 89.f);
+		vertMovement = glm::clamp(vertMovement, -89.0f, 89.0f);
 		glm::vec3 front = glm::vec3(0,0,0);
 		front.x += cos(glm::radians(horizMovement)) * cos(glm::radians(vertMovement));
 		front.y += sin(glm::radians(-vertMovement));
@@ -43,18 +41,17 @@ void Camera::Update() {
 
 void Camera::freeCamera()
 {
-	speed = 2;
 	if (Input::GetKey(KeyCode::W)) {
-		m_position += GetForwardVector() * speed;
+		m_position += GetForwardVector() * speed * Time::deltaTime;
 	}
 	if (Input::GetKey(KeyCode::S)) {
-		m_position += -GetForwardVector() * speed;
+		m_position += -GetForwardVector() * speed * Time::deltaTime;
 	}
 	if (Input::GetKey(KeyCode::A)) {
-		m_position += -GetRightVector() * speed;
+		m_position += -GetRightVector() * speed * Time::deltaTime;
 	}
 	if (Input::GetKey(KeyCode::D)) {
-		m_position += GetRightVector() * speed;
+		m_position += GetRightVector() * speed * Time::deltaTime;
 	}
 }
 

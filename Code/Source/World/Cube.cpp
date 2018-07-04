@@ -4,15 +4,15 @@ using namespace LateralEngine::Rendering;
 
 Cube::Cube()
 {
-	AddVertex(glm::vec3(-1.0, -1.0, 1.0));
-	AddVertex(glm::vec3(1.0, -1.0, 1.0));
-	AddVertex(glm::vec3(1.0, 1.0, 1.0));
-	AddVertex(glm::vec3(-1.0, 1.0, 1.0));
+	AddVertex(glm::vec3(-0.5, -0.5, 0.5));
+	AddVertex(glm::vec3(0.5, -0.5, 0.5));
+	AddVertex(glm::vec3(0.5, 0.5, 0.5));
+	AddVertex(glm::vec3(-0.5, 0.5, 0.5));
 
-	AddVertex(glm::vec3(-1.0, -1.0, -1.0));
-	AddVertex(glm::vec3(1.0, -1.0, -1.0));
-	AddVertex(glm::vec3(1.0, 1.0, -1.0));
-	AddVertex(glm::vec3(-1.0, 1.0, -1.0));
+	AddVertex(glm::vec3(-0.5, -0.5, -0.5));
+	AddVertex(glm::vec3(0.5, -0.5, -0.5));
+	AddVertex(glm::vec3(0.5, 0.5, -0.5));
+	AddVertex(glm::vec3(-0.5, 0.5, -0.5));
 
 	std::vector<USHORT> indices = {
 		// front
@@ -37,38 +37,36 @@ Cube::Cube()
 	AddIndices(indices);
 }
 
+//void Cube::GenerateBuffers()
+//{
+//
+//	glGenBuffers(1, &vao);
+//	glGenBuffers(1, &vbo);
+//	glGenBuffers(1, &ebo);
+//
+//	// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
+//	glBindVertexArray(vao);
+//
+//	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+//	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(LateralEngine::Vertex), vertices.data(), GL_STATIC_DRAW);
+//
+//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(USHORT), indices.data(), GL_STATIC_DRAW);
+//
+//	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(LateralEngine::Vertex), (void*)0);
+//	glEnableVertexAttribArray(0);
+//
+//	// note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
+//	glBindBuffer(GL_ARRAY_BUFFER, 0);
+//
+//	// remember: do NOT unbind the EBO while a VAO is active as the bound element buffer object IS stored in the VAO; keep the EBO bound.
+//	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+//
+//	// You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
+//	// VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
+//	glBindVertexArray(0);
+//}
+
 Cube::~Cube()
 {
 }
-
-void Cube::GenerateBuffers()
-{
-
-	glGenBuffers(1, &vao);
-	glGenBuffers(1, &vbo);
-	glGenBuffers(1, &ebo);
-
-	// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-	glBindVertexArray(vao);
-
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(LateralEngine::Vertex), vertices.data(), GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(USHORT), indices.data(), GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(LateralEngine::Vertex), (void*)0);
-	glEnableVertexAttribArray(0);
-
-	// note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	// remember: do NOT unbind the EBO while a VAO is active as the bound element buffer object IS stored in the VAO; keep the EBO bound.
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-	// You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
-	// VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
-	glBindVertexArray(0);
-
-}
-

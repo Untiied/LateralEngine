@@ -13,7 +13,7 @@ namespace LateralEngine {
 			Shader(std::string VertexPath = "", std::string FragmentPath = "");
 			~Shader();
 
-			void LoadShader(const char* VertexShaderPath, const char* FragmentShaderPath);
+			void LoadShader(std::string VertexShaderPath, std::string FragmentShaderPath);
 
 			void setBool(const std::string &name, bool value) const;
 			void setInt(const std::string &name, int value) const;

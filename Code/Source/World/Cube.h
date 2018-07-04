@@ -12,15 +12,9 @@ namespace LateralEngine {
 				 Cube();
 				 ~Cube();
 
-				 void GenerateBuffers();
-				 inline unsigned int GetBinding() {
-					 return vao;
-				 }
 			 public:
-				Shader shader;
 				std::shared_ptr<Transform> transform = std::make_shared<Transform>();
-			private:
-				unsigned int vao, vbo, ebo;
 			};
+	
 	}
 }

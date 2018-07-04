@@ -64,7 +64,7 @@ public:
 
 	inline void SetParent(std::shared_ptr<Transform> funcParent) {
 		parent = funcParent;
-		//funcParent->child = this;
+		funcParent->child = this;
 	}
 private:
 	glm::mat4 Rotation = glm::mat4(1.0f);

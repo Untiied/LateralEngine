@@ -1,6 +1,6 @@
 #include "Chunk.h"
 #include "../imgui/imgui.h"
-
+#include "../Renderer/OpenglRenderer.h"
 using namespace LateralEngine::Rendering;
 
 Chunk::Chunk()
@@ -14,9 +14,7 @@ float returnNumber() {
 
 void Chunk::GenerateChunk()
 {
-	int x = 0;
-	int y = 0;
-	int z = 0;
+	float test = 0;
 	for (size_t x = 0; x < 16; x++)
 	{
 		for (size_t y = 0; y < 16; y++)
@@ -24,11 +22,11 @@ void Chunk::GenerateChunk()
 			for (size_t z = 0; z < 16; z++)
 			{
 				Cube cube;
-				cube.GenerateBuffers();
 				cube.transform->setLocation(glm::vec3(x, y, z));
 				cube.transform->setColor(glm::vec3(returnNumber(), returnNumber(), returnNumber()));
 				cube.transform->SetParent(this->transform);
 				ChunkCubes.push_back(cube);
+				test++;
 			}
 		}
 	}

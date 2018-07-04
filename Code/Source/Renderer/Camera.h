@@ -37,12 +37,12 @@ namespace LateralEngine {
 			glm::vec3 m_position = glm::vec3(0.0f);
 			glm::vec3 m_forward = glm::vec3(0.0f);
 			glm::vec3 m_up = glm::vec3(0.0f);
+			float speed = 5;
 		protected:
 			glm::vec2 middle = glm::vec2(0.0f);
 			glm::vec2 oldMousePosition = glm::vec2(0.0f);
 			bool isActive = false;
 			float MouseSensitivity = .2f;
-			float speed;
 			bool first2 = true;
 		};
 	}
