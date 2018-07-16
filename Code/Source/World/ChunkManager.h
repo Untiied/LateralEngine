@@ -14,12 +14,13 @@ namespace LateralEngine
 		{
 		private:
 			//Default 8 chunks
-			float ViewDistance = 2;
+			float ViewDistance = 8;
 			const int ChunkSizeX = 16;
 			const int ChunkSizeY = 16;
 			const int ChunkSizeZ = 16;
 
 			int oldChunkCount = 0;
+			bool updateable = false;
 		public:
 			std::vector<glm::vec3> allColor;
 			std::vector<glm::mat4> allPositions;
@@ -27,9 +28,6 @@ namespace LateralEngine
 			ChunkManager();
 
 			void GenerateChunks(glm::vec3 position);
-
-			//std::map<std::pair<int, int>, Chunk> allChunks;
-			//std::vector<Chunk> allChunks;
 
 			std::map<std::pair<int, int>, Chunk> rankedChunks;
 
@@ -45,19 +43,42 @@ namespace LateralEngine
 
 			void UpdateTuple();
 
+			Cube cube;
 			inline void UpdateOpenglStuff()
 			{
-				Cube cube;
-				instanceTuple = LateralEngine::Rendering::Opengl::OpenglRenderer::GetInstance()->CreateInstancedCubes(allPositions, allColor, cube, allPositions.size());
+				instanceTuple.amount = allPositions.size();
+				LateralEngine::Rendering::Opengl::OpenglRenderer::GetInstance()->ReloadInstancedCubes(&instanceTuple, &allPositions, &allColor, &cube);
+				updateable = false;
 			}
 
-			bool IsRenderReady()
+			inline void FirstOpengl()
+			{
+				instanceTuple.amount = allPositions.size();
+				LateralEngine::Rendering::Opengl::OpenglRenderer::GetInstance()->CreateInstancedCubes(&instanceTuple, &allPositions, &allColor, &cube);
+				updateable = false;
+			}
+
+			inline bool IsRenderReady()
 			{
 				if (oldChunkCount == rankedChunks.size())
 				{
 					return true;
 				}
 				return false;
+			}
+
+			inline bool IsRenderUpdateReady()
+			{
+				if (updateable == true)
+				{
+					return true;
+				}
+				return false;
+			}
+
+			inline int GetChunkAmount()
+			{
+				return rankedChunks.size();
 			}
 
 			Utils::InstanceTuple instanceTuple;

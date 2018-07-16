@@ -62,7 +62,6 @@ void ChunkManager::UpdateTuple()
 		{
 			if (it->second.updateRender)
 			{
-				//allPositions.push_back(it->second.transform->GetWorldModel());
 				for (int x = 0; x < it->second.ChunkCubes.size(); x++)
 				{
 					allPositions.push_back(it->second.ChunkCubes[x].transform->GetWorldModel());
@@ -90,57 +89,46 @@ void ChunkManager::GenerateChunks(glm::vec3 position)
 
 	auto PlayerToChunk = WorldToChunkPosition(position);
 
-	if (!IsChunkInPosition(PlayerToChunk.first, PlayerToChunk.second))
+	//if (!IsChunkInPosition(PlayerToChunk.first, PlayerToChunk.second))
+	//{
+	//	Chunk chunk;
+	//	chunk.updateRender = true;
+	//	chunk.Move(PlayerToChunk.first * ChunkSizeX, 0, PlayerToChunk.second * ChunkSizeZ);
+	//	rankedChunks.insert(std::make_pair(std::make_pair(PlayerToChunk.first, PlayerToChunk.second), chunk));
+	//}
+
+			std::vector<std::pair<int, int>> pos;
+			std::pair<int, int> CurrentChunkPosition = PlayerToChunk;
+			int x = 1;
+			int z = 1;
+			pos.push_back(std::make_pair(CurrentChunkPosition.first + x, CurrentChunkPosition.second - z));
+			pos.push_back(std::make_pair(CurrentChunkPosition.first + x, CurrentChunkPosition.second));
+			pos.push_back(std::make_pair(CurrentChunkPosition.first + x, CurrentChunkPosition.second + z));
+			pos.push_back(std::make_pair(CurrentChunkPosition.first, CurrentChunkPosition.second - z));
+			pos.push_back(std::make_pair(CurrentChunkPosition.first, CurrentChunkPosition.second));
+			pos.push_back(std::make_pair(CurrentChunkPosition.first, CurrentChunkPosition.second + z));
+			pos.push_back(std::make_pair(CurrentChunkPosition.first - x, CurrentChunkPosition.second - z));
+			pos.push_back(std::make_pair(CurrentChunkPosition.first - x, CurrentChunkPosition.second));
+			pos.push_back(std::make_pair(CurrentChunkPosition.first - x, CurrentChunkPosition.second + z));
+	for (int i = 0; i < pos.size(); i++)
 	{
-		Chunk chunk;
-		chunk.updateRender = true;
-		chunk.Move(PlayerToChunk.first * ChunkSizeX, 0, PlayerToChunk.second * ChunkSizeZ);
-		rankedChunks.insert(std::make_pair(std::make_pair(PlayerToChunk.first, PlayerToChunk.second), chunk));
+		if (!IsChunkInPosition(pos[i].first, pos[i].second))
+		{
+			Chunk chunk;
+			chunk.updateRender = true;
+			chunk.Move(pos[i].first * ChunkSizeX, 0, pos[i].second * ChunkSizeZ);
+			rankedChunks.insert(std::make_pair(std::make_pair(pos[i].first, pos[i].second), chunk));
+		}
 	}
 
-	//if (PlayerToChunk.first & 0 && PlayerToChunk.second > 0)
-	//{
-	//	for (int x = 0; x < PlayerToChunk.first + ViewDistance; x++)
-	//	{
-	//		for (int z = 0; z < PlayerToChunk.second + ViewDistance; z++)
-	//		{
-	//			if (!IsChunkInPosition(PlayerToChunk.first + x, PlayerToChunk.second + z))
-	//			{
-	//				Chunk chunk;
-	//				if (PlayerToChunk.first != 0) //|| PlayerToChunk.second != 0)
-	//				{
-	//					chunk.Move(PlayerToChunk.first * ChunkSizeX * x, 0, PlayerToChunk.second * ChunkSizeZ * z);
-	//				}
-	//				else
-	//				{
-	//					chunk.Move(ChunkSizeX * x, 0, ChunkSizeZ * z);
-	//				}
-
-	//if (PlayerToChunk.first <= 0 || PlayerToChunk.second <= 0)
-	//{
-	//	for (int x = 0; x > PlayerToChunk.first - ViewDistance; x--)
-	//	{
-	//		for (int z = 0; z > PlayerToChunk.second - ViewDistance; z--)
-	//		{
-	//			if (!IsChunkInPosition(PlayerToChunk.first + x, PlayerToChunk.second + z))
-	//			{
-	//				Chunk chunk;
-	//				if (PlayerToChunk.first != 0) //|| PlayerToChunk.second != 0)
-	//				{
-	//					chunk.Move(PlayerToChunk.first * ChunkSizeX * x, 0, PlayerToChunk.second * ChunkSizeZ * z);
-	//				}
-	//				else
-	//				{
-	//					chunk.Move(ChunkSizeX * x, 0, ChunkSizeZ * z);
-	//				}
 
 	if (oldChunkCount == 0 || oldChunkCount < rankedChunks.size())
 	{
 		//std::future<void> result(std::async(std::launch::async, asyncUpdateTupletest, this));
 		UpdateTuple();
-		Cube cube;
-		oldChunkCount = rankedChunks.size();
 		//result.get();
+		updateable = true;
+		oldChunkCount = rankedChunks.size();
 	}
 }
 

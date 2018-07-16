@@ -1,5 +1,5 @@
 #pragma once
-#include "../World/Cube.h"
+#include "../World/ChunkCube.h"
 #include "../Renderer/IMesh.h"
 #include <vector>
 #include "../Utilities/Globals.h"
@@ -21,7 +21,7 @@ namespace LateralEngine {
 			}
 		public:
 			std::shared_ptr<Transform> transform = std::make_shared<Transform>();
-			std::vector<Cube> ChunkCubes;
+			std::vector<ChunkCube> ChunkCubes;
 			bool visible = true;
 			bool updateRender = false;
 			float OneChunk = 16;

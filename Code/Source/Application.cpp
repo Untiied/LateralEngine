@@ -35,15 +35,16 @@ class AppClass : public Engine
 		Input::window = GameWindow->GetWindow();
 		instanceShader.LoadShader("A:/lateralEngine/lateral/Code/Source/Shaders/CubeVertex.vs", "A:/lateralEngine/lateral/Code/Source/Shaders/CubeFrag.fs");
 		camera = new LateralEngine::Rendering::Camera(glm::vec3(0, 16, 0), glm::radians(70.0f), GlobalVariables::Window::width / GlobalVariables::Window::height, .01f, 1000);
+		std::thread t(&tfunc, &chunkManager, camera, GameWindow);
+		t.detach();
 		GameWindow->LockCursor();
 		srand(time(NULL));
 		initImGui();
-		chunkManager.GenerateChunks(camera->m_position);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
-		std::thread t(&tfunc, &chunkManager, camera, GameWindow);
-		t.detach();
+		if (chunkManager.IsRenderReady())
+			chunkManager.FirstOpengl();
 	}
 
 	void initImGui() {
@@ -104,14 +105,13 @@ class AppClass : public Engine
 				WireFrame = false;
 			}
 		}
-
 	}
 
 	void render() override {
 		using namespace LateralEngine::Rendering::Opengl;
 
-		if(chunkManager.IsRenderReady())
-			chunkManager.UpdateOpenglStuff();
+			if(chunkManager.IsRenderReady() && chunkManager.IsRenderUpdateReady())
+				chunkManager.UpdateOpenglStuff();
 
 		OpenglRenderer::GetInstance()->Clear();
 
@@ -119,12 +119,9 @@ class AppClass : public Engine
 
 		ImGui::Text("Chunk Position: %i, %i", chunkManager.WorldToChunkPosition(camera->m_position).first, chunkManager.WorldToChunkPosition(camera->m_position).second);
 		ImGui::Text("Camera Position: %i, %i, %i", (int)round(camera->m_position.x), (int)round(camera->m_position.y), (int)round(camera->m_position.z));
+		ImGui::Text("Loaded Chunks: %i", chunkManager.GetChunkAmount());
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::SliderFloat("Camera speed: ", &camera->speed, 0, 100);
-		if(ImGui::Button("Reset Camera", ImVec2(100, 30)))
-		{
-			camera->m_position = glm::vec3(0, 16, 0);
-		}
 
 		ImguiEnd();
 		OpenglRenderer::GetInstance()->Swap(GameWindow);
