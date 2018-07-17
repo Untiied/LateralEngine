@@ -12,11 +12,11 @@ namespace LateralEngine {
 		glm::vec2 TexCoords;
 	};
 
-	class IMesh{
+	class Mesh{
 	public:
-		IMesh(){};
+		Mesh(){};
 
-		IMesh(std::vector<Vertex> Vertices, std::vector<USHORT> Indices)
+		Mesh(std::vector<Vertex> Vertices, std::vector<USHORT> Indices)
 			: vertices(Vertices), indices(Indices){};
 	public:
 		std::vector<Vertex> vertices;

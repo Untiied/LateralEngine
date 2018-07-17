@@ -1,7 +1,9 @@
 #include "Transform.h"
+using namespace LateralEngine;
+
 Transform::Transform()
 {
-	//setLocation(glm::vec3(1, 1, 1));
+
 }
 
 Transform::~Transform()

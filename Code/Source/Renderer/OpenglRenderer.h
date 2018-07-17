@@ -2,7 +2,7 @@
 #include "../Window/Window.h"
 #include "Camera.h"
 #include <vector>
-#include "IMesh.h"
+#include "Mesh.h"
 #include "glm/glm.hpp"
 #include "../Utilities/Globals.h"
 
@@ -16,8 +16,6 @@ namespace LateralEngine {
 				void Swap(LateralEngine::Window* window);
 				void Draw();
 				void UpdateViewPort();
-
-				//Utils::InstanceTuple CreateInstancedCubes(std::vector<glm::mat4> positionData, std::vector<glm::vec3> colorData, LateralEngine::IMesh meshData, float amount);
 
 				static OpenglRenderer* GetInstance()
 				{

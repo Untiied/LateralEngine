@@ -3,8 +3,6 @@
 #include "Utilities/Log.h"
 #include "Window/Window.h"
 #include "Engine.h"
-#include "World/Cube.h"
-#include "World/Chunk.h"
 #include "Renderer/Shader.h"
 #include "Renderer/OpenglRenderer.h"
 #include "Renderer/Camera.h"
@@ -14,37 +12,61 @@
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "Utilities/Log.h"
-#include "World/ChunkManager.h"
+#include "World/GameObject.h"
+#include "Renderer/MeshRenderer.h"
 #include <memory>
 #include <thread>
 
-void tfunc(LateralEngine::Rendering::ChunkManager* chunkManager, LateralEngine::Rendering::Camera* camera, LateralEngine::Window* window)
-{
-	while (true)
-	{
-		chunkManager->Update(camera->m_position);
-	}
-}
-
 class AppClass : public Engine
 {
-	LateralEngine::Rendering::Shader instanceShader;
-	LateralEngine::Rendering::ChunkManager chunkManager;
 	LateralEngine::Rendering::Camera* camera;
+	LateralEngine::GameObject obj;
 	void init() override {
 		Input::window = GameWindow->GetWindow();
-		instanceShader.LoadShader("A:/lateralEngine/lateral/Code/Source/Shaders/CubeVertex.vs", "A:/lateralEngine/lateral/Code/Source/Shaders/CubeFrag.fs");
 		camera = new LateralEngine::Rendering::Camera(glm::vec3(0, 16, 0), glm::radians(70.0f), GlobalVariables::Window::width / GlobalVariables::Window::height, .01f, 1000);
-		std::thread t(&tfunc, &chunkManager, camera, GameWindow);
-		t.detach();
 		GameWindow->LockCursor();
 		srand(time(NULL));
 		initImGui();
 		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK);
-		if (chunkManager.IsRenderReady())
-			chunkManager.FirstOpengl();
+
+		std::vector<glm::vec3> cube_vertices = {
+			// front
+			glm::vec3(-1.0, -1.0,  1.0),
+			glm::vec3(1.0, -1.0,  1.0),
+			glm::vec3(1.0,  1.0,  1.0),
+			glm::vec3(-1.0,  1.0,  1.0),
+			// back
+			glm::vec3(-1.0, -1.0, -1.0),
+			glm::vec3(1.0, -1.0, -1.0),
+			glm::vec3(1.0,  1.0, -1.0),
+			glm::vec3(-1.0,  1.0, -1.0)
+		};
+		std::vector<unsigned short> cube_elements = {
+			// front
+			0, 1, 2,
+			2, 3, 0,
+			// right
+			1, 5, 6,
+			6, 2, 1,
+			// back
+			7, 6, 5,
+			5, 4, 7,
+			// left
+			4, 0, 3,
+			3, 7, 4,
+			// bottom
+			4, 5, 1,
+			1, 0, 4,
+			// top
+			3, 2, 6,
+			6, 7, 3,
+		};
+
+		for (size_t i = 0; i < cube_vertices.size(); i++) {
+			obj.ObjectMesh->AddVertex(cube_vertices[i]);
+		}
+		obj.ObjectMesh->indices = cube_elements;
+		obj.PushMesh();
 	}
 
 	void initImGui() {
@@ -52,7 +74,6 @@ class AppClass : public Engine
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 		ImGui_ImplGlfw_InitForOpenGL(GameWindow->GetWindow(), false);
 		ImGui_ImplOpenGL3_Init();
-
 		ImGui::StyleColorsDark();
 	}
 	void ImguiBegin() {
@@ -110,19 +131,11 @@ class AppClass : public Engine
 	void render() override {
 		using namespace LateralEngine::Rendering::Opengl;
 
-			if(chunkManager.IsRenderReady() && chunkManager.IsRenderUpdateReady())
-				chunkManager.UpdateOpenglStuff();
-
 		OpenglRenderer::GetInstance()->Clear();
-
-		OpenglRenderer::GetInstance()->DrawChunk(&chunkManager, camera, &instanceShader);
-
-		ImGui::Text("Chunk Position: %i, %i", chunkManager.WorldToChunkPosition(camera->m_position).first, chunkManager.WorldToChunkPosition(camera->m_position).second);
-		ImGui::Text("Camera Position: %i, %i, %i", (int)round(camera->m_position.x), (int)round(camera->m_position.y), (int)round(camera->m_position.z));
-		ImGui::Text("Loaded Chunks: %i", chunkManager.GetChunkAmount());
+		obj.ObjectRenderer->DrawMesh(camera);
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		ImGui::Text("Camera Positions %f, %f, %f", camera->m_position.x, camera->m_position.y, camera->m_position.z);
 		ImGui::SliderFloat("Camera speed: ", &camera->speed, 0, 100);
-
 		ImguiEnd();
 		OpenglRenderer::GetInstance()->Swap(GameWindow);
 		}
