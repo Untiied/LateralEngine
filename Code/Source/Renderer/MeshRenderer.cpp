@@ -20,7 +20,7 @@ void MeshRenderer::BindMesh(LateralEngine::Mesh* mesh) {
 			glGenVertexArrays(1, &vao);
 			glGenBuffers(1, &vbo);
 			glGenBuffers(1, &ebo);
-	
+
 			glBindVertexArray(vao);
 			glBindBuffer(GL_ARRAY_BUFFER, vbo);
 			glBufferData(GL_ARRAY_BUFFER, mesh->vertices.size() * sizeof(LateralEngine::Vertex), mesh->vertices.data(), GL_STATIC_DRAW);

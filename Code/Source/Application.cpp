@@ -14,8 +14,10 @@
 #include "Utilities/Log.h"
 #include "World/GameObject.h"
 #include "Renderer/MeshRenderer.h"
+#include "Utilities/ObjLoader.h"
 #include <memory>
 #include <thread>
+#include "Utilities/tiny_obj_loader.h"
 
 class AppClass : public Engine
 {
@@ -23,49 +25,48 @@ class AppClass : public Engine
 	LateralEngine::GameObject obj;
 	void init() override {
 		Input::window = GameWindow->GetWindow();
-		camera = new LateralEngine::Rendering::Camera(glm::vec3(0, 16, 0), glm::radians(70.0f), GlobalVariables::Window::width / GlobalVariables::Window::height, .01f, 1000);
+		camera = new LateralEngine::Rendering::Camera(glm::vec3(-5, 0, 0), glm::radians(70.0f), GlobalVariables::Window::width / GlobalVariables::Window::height, .01f, 1000);
 		GameWindow->LockCursor();
 		srand(time(NULL));
 		initImGui();
 		glEnable(GL_DEPTH_TEST);
-
-		std::vector<glm::vec3> cube_vertices = {
-			// front
-			glm::vec3(-1.0, -1.0,  1.0),
-			glm::vec3(1.0, -1.0,  1.0),
-			glm::vec3(1.0,  1.0,  1.0),
-			glm::vec3(-1.0,  1.0,  1.0),
-			// back
-			glm::vec3(-1.0, -1.0, -1.0),
-			glm::vec3(1.0, -1.0, -1.0),
-			glm::vec3(1.0,  1.0, -1.0),
-			glm::vec3(-1.0,  1.0, -1.0)
-		};
-		std::vector<unsigned short> cube_elements = {
-			// front
-			0, 1, 2,
-			2, 3, 0,
-			// right
-			1, 5, 6,
-			6, 2, 1,
-			// back
-			7, 6, 5,
-			5, 4, 7,
-			// left
-			4, 0, 3,
-			3, 7, 4,
-			// bottom
-			4, 5, 1,
-			1, 0, 4,
-			// top
-			3, 2, 6,
-			6, 7, 3,
-		};
-
-		for (size_t i = 0; i < cube_vertices.size(); i++) {
-			obj.ObjectMesh->AddVertex(cube_vertices[i]);
-		}
-		obj.ObjectMesh->indices = cube_elements;
+		//std::vector<glm::vec3> cube_vertices = {
+		//	// front
+		//	glm::vec3(-1.0, -1.0,  1.0),
+		//	glm::vec3(1.0, -1.0,  1.0),
+		//	glm::vec3(1.0,  1.0,  1.0),
+		//	glm::vec3(-1.0,  1.0,  1.0),
+		//	// back
+		//	glm::vec3(-1.0, -1.0, -1.0),
+		//	glm::vec3(1.0, -1.0, -1.0),
+		//	glm::vec3(1.0,  1.0, -1.0),
+		//	glm::vec3(-1.0,  1.0, -1.0)
+		//};
+		//std::vector<unsigned short> cube_elements = {
+		//	// front
+		//	0, 1, 2,
+		//	2, 3, 0,
+		//	// right
+		//	1, 5, 6,
+		//	6, 2, 1,
+		//	// back
+		//	7, 6, 5,
+		//	5, 4, 7,
+		//	// left
+		//	4, 0, 3,
+		//	3, 7, 4,
+		//	// bottom
+		//	4, 5, 1,
+		//	1, 0, 4,
+		//	// top
+		//	3, 2, 6,
+		//	6, 7, 3,
+		//};
+		//for (size_t i = 0; i < cube_vertices.size(); i++) {
+		//	obj.ObjectMesh->AddVertex(cube_vertices[i]);
+		//}
+		//obj.ObjectMesh->indices = cube_elements;
+		ObjLoader::LoadMesh("A:/MODELS/sibenik/sibenik.obj", obj.ObjectMesh);
 		obj.PushMesh();
 	}
 
@@ -95,12 +96,12 @@ class AppClass : public Engine
 	bool WireFrame = false;
 
 	void update() override {
-		CalculateDeltaTime();
 		ImguiBegin();
+		CalculateDeltaTime();
+		camera->freeCamera();
 		if (MouseLocked) {
 			camera->Update();
 		}
-		camera->freeCamera();
 		if (Input::GetKey(KeyCode::ESC)) {
 			GameWindow->Close();
 		}

@@ -78,7 +78,6 @@ void Window::CreateWindow()
 	glfwSetKeyCallback(m_Window, &Input::UpdateKey);
 	glfwSetWindowAttrib(m_Window, GLFW_AUTO_ICONIFY, true);
 	glfwSetWindowAttrib(m_Window, GLFW_RESIZABLE, true);
-
 	glfwMakeContextCurrent(GetWindow());
 	gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 	Log("Window creation successful!")

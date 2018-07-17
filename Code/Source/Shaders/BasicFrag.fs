@@ -2,6 +2,8 @@
 
 out vec4 FragColor;
 in vec3 outColor;
+in vec2 TextureCords;
+uniform sampler2D tex;
 
 void main()
 {
