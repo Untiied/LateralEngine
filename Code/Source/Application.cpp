@@ -18,10 +18,12 @@
 #include <memory>
 #include <thread>
 #include "Utilities/tiny_obj_loader.h"
+#include "Renderer/Texture.h"
 
 class AppClass : public Engine
 {
 	LateralEngine::Rendering::Camera* camera;
+	LateralEngine::Rendering::Texture* texture;
 	LateralEngine::GameObject obj;
 	void init() override {
 		Input::window = GameWindow->GetWindow();
@@ -30,44 +32,9 @@ class AppClass : public Engine
 		srand(time(NULL));
 		initImGui();
 		glEnable(GL_DEPTH_TEST);
-		//std::vector<glm::vec3> cube_vertices = {
-		//	// front
-		//	glm::vec3(-1.0, -1.0,  1.0),
-		//	glm::vec3(1.0, -1.0,  1.0),
-		//	glm::vec3(1.0,  1.0,  1.0),
-		//	glm::vec3(-1.0,  1.0,  1.0),
-		//	// back
-		//	glm::vec3(-1.0, -1.0, -1.0),
-		//	glm::vec3(1.0, -1.0, -1.0),
-		//	glm::vec3(1.0,  1.0, -1.0),
-		//	glm::vec3(-1.0,  1.0, -1.0)
-		//};
-		//std::vector<unsigned short> cube_elements = {
-		//	// front
-		//	0, 1, 2,
-		//	2, 3, 0,
-		//	// right
-		//	1, 5, 6,
-		//	6, 2, 1,
-		//	// back
-		//	7, 6, 5,
-		//	5, 4, 7,
-		//	// left
-		//	4, 0, 3,
-		//	3, 7, 4,
-		//	// bottom
-		//	4, 5, 1,
-		//	1, 0, 4,
-		//	// top
-		//	3, 2, 6,
-		//	6, 7, 3,
-		//};
-		//for (size_t i = 0; i < cube_vertices.size(); i++) {
-		//	obj.ObjectMesh->AddVertex(cube_vertices[i]);
-		//}
-		//obj.ObjectMesh->indices = cube_elements;
-		ObjLoader::LoadMesh("A:/MODELS/sibenik/sibenik.obj", obj.ObjectMesh);
+		ObjLoader::LoadMesh("A:/MODELS/CornelBox/CornellBox-Original.obj", "A:/MODELS/CornelBox/", obj.ObjectMesh);
 		obj.PushMesh();
+		texture = new LateralEngine::Rendering::Texture("A:/MODELS/sibenik/kamen.png");
 	}
 
 	void initImGui() {
