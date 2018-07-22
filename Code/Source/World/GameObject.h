@@ -13,10 +13,8 @@ namespace LateralEngine {
 	public:
 		virtual void Start();
 		virtual void Tick(float deltaTime);
-		void PushMesh();
 	public:
-		class Mesh* ObjectMesh;
-		class Rendering::MeshRenderer* ObjectRenderer;
+		class Model* ObjectModel;
 		class LateralEngine::Transform* transform;
 	};
 }

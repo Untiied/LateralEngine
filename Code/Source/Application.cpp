@@ -14,11 +14,10 @@
 #include "Utilities/Log.h"
 #include "World/GameObject.h"
 #include "Renderer/MeshRenderer.h"
-#include "Utilities/ObjLoader.h"
 #include <memory>
 #include <thread>
-#include "Utilities/tiny_obj_loader.h"
 #include "Renderer/Texture.h"
+#include "Renderer/Model.h"
 
 class AppClass : public Engine
 {
@@ -32,9 +31,9 @@ class AppClass : public Engine
 		srand(time(NULL));
 		initImGui();
 		glEnable(GL_DEPTH_TEST);
-		ObjLoader::LoadMesh("A:/MODELS/CornelBox/CornellBox-Original.obj", "A:/MODELS/CornelBox/", obj.ObjectMesh);
-		obj.PushMesh();
-		texture = new LateralEngine::Rendering::Texture("A:/MODELS/sibenik/kamen.png");
+		obj.ObjectModel->loadModel("A:/MODELS/CornelBox/CornellBox-Original.obj");
+		obj.ObjectModel->LinkMeshes();
+		//texture = new LateralEngine::Rendering::Texture("A:/MODELS/sibenik/kamen.png");
 	}
 
 	void initImGui() {
@@ -100,7 +99,7 @@ class AppClass : public Engine
 		using namespace LateralEngine::Rendering::Opengl;
 
 		OpenglRenderer::GetInstance()->Clear();
-		obj.ObjectRenderer->DrawMesh(camera);
+		obj.ObjectModel->Draw(camera);
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::Text("Camera Positions %f, %f, %f", camera->m_position.x, camera->m_position.y, camera->m_position.z);
 		ImGui::SliderFloat("Camera speed: ", &camera->speed, 0, 100);

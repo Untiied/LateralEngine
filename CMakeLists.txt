@@ -18,7 +18,11 @@ add_subdirectory(External/glfw)
 #glm
 add_subdirectory(External/glm)
 
+#assimp
+add_subdirectory(External/assimp)
+include_directories(External/assimp/include)
+
 add_executable(lateral ${sourceFiles} ${headerFiles})
 find_package(Vulkan REQUIRED)
 find_package(Opengl REQUIRED)
-target_link_libraries(lateral glfw glm Vulkan::Vulkan opengl32)
+target_link_libraries(lateral glfw glm assimp Vulkan::Vulkan opengl32)

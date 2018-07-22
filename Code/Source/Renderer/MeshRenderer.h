@@ -15,6 +15,7 @@ namespace LateralEngine {
 			unsigned int indexCount;
 		public:
 			class Shader* MeshShader;
+			class LateralEngine::Mesh* mesh;
 			class LateralEngine::GameObject* Owner;
 		};
 	}

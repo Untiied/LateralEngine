@@ -13,10 +13,12 @@ MeshRenderer::MeshRenderer() {
 }
 
 MeshRenderer::~MeshRenderer() {
-	delete(MeshShader);
+	//delete(MeshShader);
 }
 
 void MeshRenderer::BindMesh(LateralEngine::Mesh* mesh) {
+			this->mesh = mesh;
+			this->Owner = mesh->Owner;
 			glGenVertexArrays(1, &vao);
 			glGenBuffers(1, &vbo);
 			glGenBuffers(1, &ebo);
@@ -30,7 +32,6 @@ void MeshRenderer::BindMesh(LateralEngine::Mesh* mesh) {
 
 			glEnableVertexAttribArray(0);
 			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(LateralEngine::Vertex), (void*)0);
-
 			indexCount = mesh->indices.size();
 			glBindVertexArray(0);
 }
@@ -40,7 +41,7 @@ void MeshRenderer::DrawMesh(Camera* camera) {
 	MeshShader->setMat4("View", camera->GetViewProjection());
 	MeshShader->setMat4("Projection", camera->GetPerspective());
 	MeshShader->setMat4("Model", Owner->transform->GetWorldModel());
-
+	mesh->material.bindToShader(MeshShader);
 	glBindVertexArray(vao);
 	glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_SHORT, (void*)0);
 	glBindVertexArray(0);
