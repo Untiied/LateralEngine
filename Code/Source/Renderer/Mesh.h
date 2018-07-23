@@ -25,11 +25,12 @@ namespace LateralEngine {
 		Mesh(std::vector<Vertex> Vertices, std::vector<USHORT> Indices)
 			: vertices(Vertices), indices(Indices){};
 	public:
+		///Contain id to texture for rendesdrin # fixs
 		std::vector<Vertex> vertices;
-		std::vector<glm::vec2> textureCords;
 		std::vector<USHORT> indices;
 		Rendering::Material material;
 		Rendering::MeshRenderer meshRenderer;
+		Rendering::Texture texture;
 		class GameObject* Owner;
 	public:
 
@@ -43,7 +44,6 @@ namespace LateralEngine {
 			funcVer.TexCoords = texture;
 
 			vertices.push_back(funcVer);
-			textureCords.push_back(texture);
 		}
 		inline void AddVertex(Vertex vert) {
 			vertices.push_back(vert);

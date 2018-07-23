@@ -26,14 +26,11 @@ class AppClass : public Engine
 	LateralEngine::GameObject obj;
 	void init() override {
 		Input::window = GameWindow->GetWindow();
-		camera = new LateralEngine::Rendering::Camera(glm::vec3(-5, 0, 0), glm::radians(70.0f), GlobalVariables::Window::width / GlobalVariables::Window::height, .01f, 1000);
+		camera = new LateralEngine::Rendering::Camera(glm::vec3(0, 0, 0), glm::radians(90.0f), GlobalVariables::Window::width / GlobalVariables::Window::height, .01f, 6000);
 		GameWindow->LockCursor();
-		srand(time(NULL));
 		initImGui();
 		glEnable(GL_DEPTH_TEST);
-		obj.ObjectModel->loadModel("A:/MODELS/CornelBox/CornellBox-Original.obj");
-		obj.ObjectModel->LinkMeshes();
-		//texture = new LateralEngine::Rendering::Texture("A:/MODELS/sibenik/kamen.png");
+		obj.ObjectModel->loadModel("A:/MODELS/sponza/sponza.obj","A:/MODELS/sponza/");
 	}
 
 	void initImGui() {
@@ -97,12 +94,11 @@ class AppClass : public Engine
 
 	void render() override {
 		using namespace LateralEngine::Rendering::Opengl;
-
 		OpenglRenderer::GetInstance()->Clear();
 		obj.ObjectModel->Draw(camera);
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::Text("Camera Positions %f, %f, %f", camera->m_position.x, camera->m_position.y, camera->m_position.z);
-		ImGui::SliderFloat("Camera speed: ", &camera->speed, 0, 100);
+		ImGui::SliderFloat("Camera speed: ", &camera->speed, 0, 1000);
 		ImguiEnd();
 		OpenglRenderer::GetInstance()->Swap(GameWindow);
 		}

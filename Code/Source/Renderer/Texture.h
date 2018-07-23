@@ -5,11 +5,15 @@ namespace LateralEngine {
 	namespace Rendering {
 		class Texture {
 		public:
-			Texture(std::string path);
+			inline Texture() {};
+			Texture(std::string inpath);
+			void LoadTexture(std::string inpath);
 			~Texture();
 		public:
 			unsigned int tex;
 			unsigned char* image;
+			std::string type;
+			std::string path;
 			int width, height;
 			void Bind();
 		};

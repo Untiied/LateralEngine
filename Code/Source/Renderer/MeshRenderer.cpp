@@ -3,6 +3,7 @@
 #include "MeshRenderer.h"
 #include "Shader.h"
 #include "Mesh.h"
+#include "Texture.h"
 #include "../World/GameObject.h"
 #include "../World/Transform.h"
 
@@ -30,9 +31,14 @@ void MeshRenderer::BindMesh(LateralEngine::Mesh* mesh) {
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh->indices.size() * sizeof(unsigned short), mesh->indices.data(), GL_STATIC_DRAW);
 
-			glEnableVertexAttribArray(0);
 			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(LateralEngine::Vertex), (void*)0);
-			indexCount = mesh->indices.size();
+			glEnableVertexAttribArray(0);
+
+			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(LateralEngine::Vertex), (void*)(3 * sizeof(float)));
+			glEnableVertexAttribArray(1);
+
+			glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(LateralEngine::Vertex), (void*)(6 * sizeof(float)));
+			glEnableVertexAttribArray(2);
 			glBindVertexArray(0);
 }
 
@@ -41,8 +47,15 @@ void MeshRenderer::DrawMesh(Camera* camera) {
 	MeshShader->setMat4("View", camera->GetViewProjection());
 	MeshShader->setMat4("Projection", camera->GetPerspective());
 	MeshShader->setMat4("Model", Owner->transform->GetWorldModel());
-	mesh->material.bindToShader(MeshShader);
+
+	MeshShader->setVec3("material.Ambient", mesh->material.ambient);
+
+	if (mesh->texture.path != "") {
+		glActiveTexture(GL_TEXTURE0);
+		mesh->texture.Bind();
+	}
+
 	glBindVertexArray(vao);
-	glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_SHORT, (void*)0);
+	glDrawElements(GL_TRIANGLES, mesh->indices.size() , GL_UNSIGNED_SHORT, (void*)0);
 	glBindVertexArray(0);
 }
