@@ -18,8 +18,7 @@ namespace LateralEngine {
 
 	class Mesh{
 	public:
-		Mesh(class GameObject* owner){
-			Owner = owner;
+		Mesh(){
 		};
 		//Add texture cords to this..
 		Mesh(std::vector<Vertex> Vertices, std::vector<USHORT> Indices)
@@ -30,8 +29,7 @@ namespace LateralEngine {
 		std::vector<USHORT> indices;
 		Rendering::Material material;
 		Rendering::MeshRenderer meshRenderer;
-		Rendering::Texture texture;
-		class GameObject* Owner;
+		std::shared_ptr<Rendering::Texture> texture;
 	public:
 
 		inline void AddVertex(glm::vec3 vertice = glm::vec3(0.0f,0.0f,0.0f), 

@@ -1,5 +1,5 @@
 #pragma once
-
+#include "../Renderer/Model.h"
 namespace LateralEngine {
 	class Transform;
 	namespace Rendering {
@@ -14,7 +14,7 @@ namespace LateralEngine {
 		virtual void Start();
 		virtual void Tick(float deltaTime);
 	public:
-		class Model* ObjectModel;
+		std::shared_ptr<Model> ObjectModel;
 		class LateralEngine::Transform* transform;
 	};
 }

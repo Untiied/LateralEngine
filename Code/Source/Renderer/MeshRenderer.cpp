@@ -6,11 +6,11 @@
 #include "Texture.h"
 #include "../World/GameObject.h"
 #include "../World/Transform.h"
-
+#include "../Utilities/AssetManager.h"
 using namespace LateralEngine::Rendering;
 
 MeshRenderer::MeshRenderer() {
-	MeshShader = new Shader();
+	MeshShader = AssetManager::LoadShader();
 }
 
 MeshRenderer::~MeshRenderer() {
@@ -19,7 +19,6 @@ MeshRenderer::~MeshRenderer() {
 
 void MeshRenderer::BindMesh(LateralEngine::Mesh* mesh) {
 			this->mesh = mesh;
-			this->Owner = mesh->Owner;
 			glGenVertexArrays(1, &vao);
 			glGenBuffers(1, &vbo);
 			glGenBuffers(1, &ebo);
@@ -42,19 +41,19 @@ void MeshRenderer::BindMesh(LateralEngine::Mesh* mesh) {
 			glBindVertexArray(0);
 }
 
-void MeshRenderer::DrawMesh(Camera* camera) {
+void MeshRenderer::DrawMesh(Camera* camera, LateralEngine::GameObject* obj) {
 	MeshShader->Bind();
 	MeshShader->setMat4("View", camera->GetViewProjection());
 	MeshShader->setMat4("Projection", camera->GetPerspective());
-	MeshShader->setMat4("Model", Owner->transform->GetWorldModel());
+	MeshShader->setMat4("Model", obj->transform->GetWorldModel());
 
-	MeshShader->setVec3("material.Ambient", mesh->material.ambient);
+	mesh->material.bindToShader(mesh->meshRenderer.MeshShader);
 
-	if (mesh->texture.path != "") {
+	if (mesh->texture != std::shared_ptr<Texture>()) {
 		glActiveTexture(GL_TEXTURE0);
-		mesh->texture.Bind();
+		mesh->texture->Bind();
 	}
-
+	
 	glBindVertexArray(vao);
 	glDrawElements(GL_TRIANGLES, mesh->indices.size() , GL_UNSIGNED_SHORT, (void*)0);
 	glBindVertexArray(0);

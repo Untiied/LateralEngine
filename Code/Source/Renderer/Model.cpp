@@ -1,4 +1,5 @@
 #include "Model.h"
+#include "../Utilities/AssetManager.h"
 #include "../Utilities/Log.h"
 using namespace LateralEngine;
 
@@ -23,9 +24,9 @@ void Model::LinkMeshes() {
 	}
 }
 
-void Model::Draw(Rendering::Camera* camera) {
+void Model::Draw(Rendering::Camera* camera, GameObject* obj) {
 	for (size_t i = 0; i < meshes.size(); i++) {
-		meshes[i].meshRenderer.DrawMesh(camera);
+		meshes[i].meshRenderer.DrawMesh(camera, obj);
 	}
 }
 
@@ -44,7 +45,7 @@ void Model::processNode(aiNode * node, const aiScene * scene) {
 }
 
 Mesh Model::processMesh(aiMesh * mesh, const aiScene * scene) {
-	Mesh returnedMesh(Owner);
+	Mesh returnedMesh;
 
 	for (unsigned int v = 0; v < mesh->mNumVertices; v++) {
 		Vertex vertex;
@@ -87,7 +88,8 @@ Mesh Model::processMesh(aiMesh * mesh, const aiScene * scene) {
 		std::string beforePath = basePath;
 		if (material->GetTexture(aiTextureType_DIFFUSE, 0, &path) == AI_SUCCESS) {
 			beforePath = beforePath + path.C_Str();
-			returnedMesh.texture.LoadTexture(beforePath);
+			returnedMesh.texture = AssetManager::LoadTexture(beforePath);
+			//returnedMesh.texture.LoadTexture(beforePath);
 		}
 
 		aiColor3D color (0.f,0.f,0.f);
@@ -159,7 +161,6 @@ std::vector<Rendering::Texture> Model::loadMaterialTextures(aiMaterial * mat, ai
 			texture.type = typeName;
 			texture.path = str.C_Str();
 			textures.push_back(texture);
-			//textures.push_back(texture);  // store it as texture loaded for entire model, to ensure we won't unnecesery load duplicate textures.
 	}
 	return textures;
 }

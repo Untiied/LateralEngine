@@ -1,4 +1,5 @@
 #pragma once
+#include "Shader.h"
 
 namespace LateralEngine {
 	class Mesh;
@@ -10,11 +11,11 @@ namespace LateralEngine {
 			~MeshRenderer();
 		public:
 			void BindMesh(LateralEngine::Mesh* mesh);
-			void DrawMesh(class Camera* camera);
+			void DrawMesh(class Camera* camera, class LateralEngine::GameObject* obj);
 			unsigned int vao, vbo, ebo;
 			unsigned int indexCount;
 		public:
-			class Shader* MeshShader;
+			class std::shared_ptr<Rendering::Shader> MeshShader;
 			class LateralEngine::Mesh* mesh;
 			class LateralEngine::GameObject* Owner;
 		};

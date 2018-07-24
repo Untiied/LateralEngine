@@ -6,12 +6,10 @@
 using namespace LateralEngine;
 
 GameObject::GameObject() {
-	ObjectModel = new Model(this);
 	transform = new Transform();
 }
 
 GameObject::~GameObject() {
-	delete(ObjectModel);
 	delete(transform);
 }
 

@@ -21,7 +21,7 @@ void Shader::LoadShader(std::string VertexShaderPath, std::string FragmentShader
 	const char* shaderLoadedChar;
 
 	//Vertex shader
-	std::string vertexShaderLoaded = Utils::readFile(VertexShaderPath);
+	vertexShaderLoaded = Utils::readFile(VertexShaderPath);
 	shaderLoadedChar = vertexShaderLoaded.c_str();
 	vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShader, 1, &shaderLoadedChar, NULL);
@@ -36,7 +36,7 @@ void Shader::LoadShader(std::string VertexShaderPath, std::string FragmentShader
 			OpenglLog("ERROR::SHADER::VERTEX::COMPILATION_FAILED %s", infoLog)
 		}
 	//Fragment Shader
-		std::string fragmentShaderLoaded = Utils::readFile(FragmentShaderPath);
+		fragmentShaderLoaded = Utils::readFile(FragmentShaderPath);
 		shaderLoadedChar = fragmentShaderLoaded.c_str();
 	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragmentShader, 1, &shaderLoadedChar, NULL);

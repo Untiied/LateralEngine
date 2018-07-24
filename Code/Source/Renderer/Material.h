@@ -7,7 +7,7 @@ namespace LateralEngine {
 	namespace Rendering {
 		class Material {
 		public:
-			inline void bindToShader(Shader* shader) {
+			inline void bindToShader(std::shared_ptr<Shader> shader) {
 				shader->setVec3("material.Emission", emission);
 				shader->setVec3("material.Ambient", ambient);
 				shader->setVec3("material.Diffuse", diffuse);

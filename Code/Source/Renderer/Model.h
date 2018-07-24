@@ -11,18 +11,14 @@ namespace LateralEngine {
 	class Model {
 	public:
 		/*  Functions   */
-		Model(class GameObject* owner) {
-			Owner = owner;
-		}
-
-		Model(char *path, char *basePath)
+		Model(std::string path, std::string basePath)
 		{
 			loadModel(path, basePath);
 		}
 
 		void loadModel(std::string path, std::string texturePath);
 		void LinkMeshes();
-		void Draw(Rendering::Camera* camera);
+		void Draw(Rendering::Camera* camera, class GameObject* obj);
 	private:
 		/*  Model Data  */
 		//Path that is used for textureLoading.
@@ -30,7 +26,7 @@ namespace LateralEngine {
 		std::vector<Mesh> meshes;
 		std::vector<Rendering::Texture> textures;
 		std::string directory;
-		class GameObject* Owner;
+
 		/*  Functions   */
 		void processNode(class aiNode *node, const class aiScene *scene);
 		Mesh processMesh(class aiMesh *mesh, const class aiScene *scene);

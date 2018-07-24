@@ -33,6 +33,9 @@ namespace LateralEngine {
 			unsigned int GetShaderProgram() {
 				return shaderProgram;
 			}
+
+			std::string vertexShaderLoaded;
+			std::string fragmentShaderLoaded;
 		private:
 			unsigned int shaderProgram;
 			unsigned int vertexShader;

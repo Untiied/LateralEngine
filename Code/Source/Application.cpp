@@ -18,19 +18,25 @@
 #include <thread>
 #include "Renderer/Texture.h"
 #include "Renderer/Model.h"
+#include "Utilities/AssetManager.h"
+#include "World/Transform.h"
 
 class AppClass : public Engine
 {
 	LateralEngine::Rendering::Camera* camera;
 	LateralEngine::Rendering::Texture* texture;
-	LateralEngine::GameObject obj;
+	LateralEngine::GameObject* obj = new LateralEngine::GameObject();
+	LateralEngine::GameObject* obj2 = new LateralEngine::GameObject();
 	void init() override {
 		Input::window = GameWindow->GetWindow();
 		camera = new LateralEngine::Rendering::Camera(glm::vec3(0, 0, 0), glm::radians(90.0f), GlobalVariables::Window::width / GlobalVariables::Window::height, .01f, 6000);
 		GameWindow->LockCursor();
 		initImGui();
 		glEnable(GL_DEPTH_TEST);
-		obj.ObjectModel->loadModel("A:/MODELS/sponza/sponza.obj","A:/MODELS/sponza/");
+		obj->ObjectModel = LateralEngine::AssetManager::LoadModel("A:/MODELS/sponza/sponza.obj","A:/MODELS/sponza/");
+		obj2->ObjectModel = LateralEngine::AssetManager::LoadModel("A:/MODELS/TestCube/Modeled.obj","A:/MODELS/TestCube/");
+		obj2->transform->setScale(glm::vec3(100, 100, 100));
+		obj2->transform->setLocation(0, 300, 0);
 	}
 
 	void initImGui() {
@@ -95,7 +101,8 @@ class AppClass : public Engine
 	void render() override {
 		using namespace LateralEngine::Rendering::Opengl;
 		OpenglRenderer::GetInstance()->Clear();
-		obj.ObjectModel->Draw(camera);
+		obj->ObjectModel->Draw(camera, obj);
+		obj2->ObjectModel->Draw(camera, obj2);
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::Text("Camera Positions %f, %f, %f", camera->m_position.x, camera->m_position.y, camera->m_position.z);
 		ImGui::SliderFloat("Camera speed: ", &camera->speed, 0, 1000);
