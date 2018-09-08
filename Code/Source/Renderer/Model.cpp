@@ -25,9 +25,9 @@ void Model::LinkMeshes() {
 }
 
 void Model::Draw(Rendering::Camera* camera, GameObject* obj) {
-	for (size_t i = 0; i < meshes.size(); i++) {
-		meshes[i].meshRenderer.DrawMesh(camera, obj);
-	}
+		for (size_t i = 0; i < meshes.size(); i++) {
+			meshes[i].meshRenderer.DrawMesh(camera, obj);
+		}
 }
 
 void Model::processNode(aiNode * node, const aiScene * scene) {
@@ -45,7 +45,7 @@ void Model::processNode(aiNode * node, const aiScene * scene) {
 }
 
 Mesh Model::processMesh(aiMesh * mesh, const aiScene * scene) {
-	Mesh returnedMesh;
+	Mesh* returnedMesh = new Mesh();
 
 	for (unsigned int v = 0; v < mesh->mNumVertices; v++) {
 		Vertex vertex;
@@ -71,7 +71,7 @@ Mesh Model::processMesh(aiMesh * mesh, const aiScene * scene) {
 
 		//}
 
-		returnedMesh.AddVertex(vertex);
+		returnedMesh->AddVertex(vertex);
 	}
 
 	for(unsigned int i = 0; i < mesh->mNumFaces; i++)
@@ -79,7 +79,7 @@ Mesh Model::processMesh(aiMesh * mesh, const aiScene * scene) {
 		aiFace face = mesh->mFaces[i];
 		// retrieve all indices of the face and store them in the indices vector
 		for (unsigned int j = 0; j < face.mNumIndices; j++)
-			returnedMesh.AddIndice(face.mIndices[j]);
+			returnedMesh->AddIndice(face.mIndices[j]);
 	}
 
 	if (mesh->mMaterialIndex >= 0) {
@@ -88,8 +88,7 @@ Mesh Model::processMesh(aiMesh * mesh, const aiScene * scene) {
 		std::string beforePath = basePath;
 		if (material->GetTexture(aiTextureType_DIFFUSE, 0, &path) == AI_SUCCESS) {
 			beforePath = beforePath + path.C_Str();
-			returnedMesh.texture = AssetManager::LoadTexture(beforePath);
-			//returnedMesh.texture.LoadTexture(beforePath);
+			returnedMesh->meshRenderer.MeshTexture = AssetManager::LoadTexture(beforePath);
 		}
 
 		aiColor3D color (0.f,0.f,0.f);
@@ -99,7 +98,7 @@ Mesh Model::processMesh(aiMesh * mesh, const aiScene * scene) {
 			color.g,
 			color.b
 		};
-		returnedMesh.material.emission = matColor;
+		returnedMesh->material.emission = matColor;
 
 		material->Get(AI_MATKEY_COLOR_AMBIENT,color);
 		glm::vec3 mat1Color{
@@ -107,7 +106,7 @@ Mesh Model::processMesh(aiMesh * mesh, const aiScene * scene) {
 			color.g,
 			color.b
 		};
-		returnedMesh.material.ambient = mat1Color;
+		returnedMesh->material.ambient = mat1Color;
 
 		material->Get(AI_MATKEY_COLOR_DIFFUSE,color);
 		glm::vec3 mat2Color{
@@ -115,7 +114,7 @@ Mesh Model::processMesh(aiMesh * mesh, const aiScene * scene) {
 			color.g,
 			color.b
 		};
-		returnedMesh.material.diffuse = mat2Color;
+		returnedMesh->material.diffuse = mat2Color;
 
 		//float shine;
 		//material->Get(AI_MATKEY_UVTRANSFORM_SHININESS,color);
@@ -132,7 +131,7 @@ Mesh Model::processMesh(aiMesh * mesh, const aiScene * scene) {
 			color.g,
 			color.b
 		};
-		returnedMesh.material.specular = mat3Color;
+		returnedMesh->material.specular = mat3Color;
 
 		//// 1. diffuse maps
 		//std::vector<Rendering::Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
@@ -147,7 +146,8 @@ Mesh Model::processMesh(aiMesh * mesh, const aiScene * scene) {
 		//std::vector<Rendering::Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
 		//textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 	}
-	return returnedMesh;
+	returnedMesh->boxCollider.CreateBindingBox(returnedMesh);
+	return *returnedMesh;
 }
 
 std::vector<Rendering::Texture> Model::loadMaterialTextures(aiMaterial * mat, aiTextureType type, std::string typeName) {

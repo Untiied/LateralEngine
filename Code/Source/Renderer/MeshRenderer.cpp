@@ -49,9 +49,9 @@ void MeshRenderer::DrawMesh(Camera* camera, LateralEngine::GameObject* obj) {
 
 	mesh->material.bindToShader(mesh->meshRenderer.MeshShader);
 
-	if (mesh->texture != std::shared_ptr<Texture>()) {
+	if (mesh->meshRenderer.MeshTexture != std::shared_ptr<Texture>()) {
 		glActiveTexture(GL_TEXTURE0);
-		mesh->texture->Bind();
+		mesh->meshRenderer.MeshTexture->Bind();
 	}
 	
 	glBindVertexArray(vao);

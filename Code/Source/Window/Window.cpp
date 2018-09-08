@@ -10,7 +10,21 @@ Window::Window()
 {
 	glfwInit();
 	PopulateConfig();
-	CreateWindow();
+	CreateWindowContext();
+}
+
+bool Window::CreateWindowContext() {
+	m_Window = glfwCreateWindow(GlobalVariables::Window::width, GlobalVariables::Window::height, GlobalVariables::Application::ApplicationName, nullptr, nullptr);
+	glfwSetCursorPosCallback(m_Window, &Input::UpdateMousePosition);
+	glfwSetMouseButtonCallback(m_Window, &Input::UpdateMouseButton);
+	glfwSetWindowSizeCallback(m_Window, &ResizeCallback);
+	glfwSetKeyCallback(m_Window, &Input::UpdateKey);
+	glfwSetWindowAttrib(m_Window, GLFW_AUTO_ICONIFY, true);
+	glfwSetWindowAttrib(m_Window, GLFW_RESIZABLE, true);
+	glfwMakeContextCurrent(GetWindow());
+	gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+	Log("Window creation successful!")
+	return true;
 }
 
 bool Window::ShouldClose() 
@@ -67,20 +81,6 @@ void ResizeCallback(GLFWwindow * window, int width, int height)
 	GlobalVariables::Window::height = height;
 
 	LateralEngine::Rendering::Opengl::OpenglRenderer::GetInstance()->UpdateViewPort();
-}
-
-void Window::CreateWindow()
-{
-	m_Window = glfwCreateWindow(GlobalVariables::Window::width, GlobalVariables::Window::height, GlobalVariables::Application::ApplicationName, nullptr, nullptr);
-	glfwSetCursorPosCallback(m_Window, &Input::UpdateMousePosition);
-	glfwSetMouseButtonCallback(m_Window, &Input::UpdateMouseButton);
-	glfwSetWindowSizeCallback(m_Window, &ResizeCallback);
-	glfwSetKeyCallback(m_Window, &Input::UpdateKey);
-	glfwSetWindowAttrib(m_Window, GLFW_AUTO_ICONIFY, true);
-	glfwSetWindowAttrib(m_Window, GLFW_RESIZABLE, true);
-	glfwMakeContextCurrent(GetWindow());
-	gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-	Log("Window creation successful!")
 }
 
 Window::~Window() {

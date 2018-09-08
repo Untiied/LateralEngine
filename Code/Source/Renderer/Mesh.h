@@ -6,6 +6,7 @@
 #include "Texture.h"
 #include "Material.h"
 #include "MeshRenderer.h"
+#include "../Utilities/AABB.h"
 #define USHORT unsigned short
 
 namespace LateralEngine {
@@ -18,18 +19,17 @@ namespace LateralEngine {
 
 	class Mesh{
 	public:
-		Mesh(){
-		};
+		Mesh(){};
 		//Add texture cords to this..
 		Mesh(std::vector<Vertex> Vertices, std::vector<USHORT> Indices)
 			: vertices(Vertices), indices(Indices){};
 	public:
-		///Contain id to texture for rendesdrin # fixs
+		//Contain id to texture for rendering # fixes
 		std::vector<Vertex> vertices;
 		std::vector<USHORT> indices;
 		Rendering::Material material;
 		Rendering::MeshRenderer meshRenderer;
-		std::shared_ptr<Rendering::Texture> texture;
+		AABB boxCollider;
 	public:
 
 		inline void AddVertex(glm::vec3 vertice = glm::vec3(0.0f,0.0f,0.0f), 
@@ -51,6 +51,9 @@ namespace LateralEngine {
 		}
 		inline void AddIndices(std::vector<USHORT> indexes) {
 			indices = indexes;
+		}
+		inline bool HasTexture() {
+			return meshRenderer.HasTexture();
 		}
 	};
 

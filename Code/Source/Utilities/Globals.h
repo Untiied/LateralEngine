@@ -21,6 +21,7 @@ namespace GlobalVariables{
 }
 
 namespace Utils {
+	extern const float getAspectRatio();
 	extern const std::string currentDateTime();
 	extern const std::vector<char> readVulkanShader(const char* path);
 	extern const std::string readFile(std::string path);

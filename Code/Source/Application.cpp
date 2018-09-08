@@ -20,6 +20,7 @@
 #include "Renderer/Model.h"
 #include "Utilities/AssetManager.h"
 #include "World/Transform.h"
+#include "Utilities/AssetManager.h"
 
 class AppClass : public Engine
 {
@@ -73,6 +74,9 @@ class AppClass : public Engine
 		}
 		if (Input::GetKey(KeyCode::ESC)) {
 			GameWindow->Close();
+		}
+		if (Input::GetKeyDown(KeyCode::F9)) {
+			LateralEngine::AssetManager::ReloadShaders();
 		}
 		if (Input::GetKeyDown(KeyCode::F10)) {
 			if (MouseLocked) {

@@ -10,8 +10,10 @@ namespace LateralEngine {
 		public:
 			glm::mat4 View;
 			Camera(glm::vec3 pos, float fov, float aspect, float znear, float zfar);
-
+			Camera();
 			glm::mat4 GetViewProjection();
+
+			void Setup(glm::vec3 pos, float fov, float aspect, float znear, float zfar);
 
 			inline glm::mat4 GetPerspective() {
 				return m_perspective;

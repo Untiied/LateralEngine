@@ -8,7 +8,6 @@ namespace LateralEngine {
 			inline Texture() {};
 			Texture(std::string inpath);
 			void LoadTexture(std::string inpath);
-			~Texture();
 		public:
 			unsigned int tex;
 			unsigned char* image;

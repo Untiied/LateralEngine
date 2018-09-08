@@ -1,5 +1,8 @@
-#pragma once
+#ifndef GAMEOBJECT_H
+#define GAMEOBJECT_H
 #include "../Renderer/Model.h"
+#include "Transform.h"
+#include "../Renderer/MeshRenderer.h"
 namespace LateralEngine {
 	class Transform;
 	namespace Rendering {
@@ -15,6 +18,7 @@ namespace LateralEngine {
 		virtual void Tick(float deltaTime);
 	public:
 		std::shared_ptr<Model> ObjectModel;
-		class LateralEngine::Transform* transform;
+		LateralEngine::Transform* transform;
 	};
 }
+#endif

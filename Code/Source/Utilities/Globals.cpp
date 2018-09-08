@@ -27,7 +27,7 @@ namespace GlobalVariables {
 }
 
 namespace Utils {
-	inline const std::string currentDateTime() {
+	const std::string currentDateTime() {
 		time_t     now = time(0);
 		struct tm  tstruct;
 		char       buf[80];
@@ -67,6 +67,10 @@ namespace Utils {
 			std::istreambuf_iterator<char>());
 
 		return s;
+	}
+
+	const float getAspectRatio() {
+		return  GlobalVariables::Window::width / GlobalVariables::Window::height;
 	}
 }
 

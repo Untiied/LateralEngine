@@ -7,6 +7,7 @@ namespace LateralEngine{
 	class Window {
 	public:
 		Window();
+		bool CreateWindowContext();
 		~Window();
 
 		bool ShouldClose();
@@ -29,7 +30,6 @@ namespace LateralEngine{
 	private:
 		GLFWwindow* m_Window;
 		void PopulateConfig();
-		void CreateWindow();
 	};
 }
 

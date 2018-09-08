@@ -6,6 +6,10 @@
 #include "../Utilities/Input.h"
 
 using namespace LateralEngine::Rendering;
+Camera::Camera() {
+
+}
+
 Camera::Camera(glm::vec3 pos, float fov, float aspect, float znear, float zfar) {
 	m_perspective = glm::perspective(fov, aspect, znear, zfar);
 	m_position = pos;
@@ -18,6 +22,15 @@ Camera::Camera(glm::vec3 pos, float fov, float aspect, float znear, float zfar) 
 glm::mat4 Camera::GetViewProjection() {
 	View = glm::lookAt(m_position, m_position + m_forward, m_up);
 	return View;
+}
+
+void Camera::Setup(glm::vec3 pos, float fov, float aspect, float znear, float zfar) {
+	m_perspective = glm::perspective(fov, aspect, znear, zfar);
+	m_position = pos;
+	m_forward = glm::vec3(1.0f, 0.0f, 0.0f);
+	m_up = glm::vec3(0.0f, 1.0f, 0.0f);
+	middle.x = GlobalVariables::Window::width / 2.0f;
+	middle.y = GlobalVariables::Window::height / 2.0f;
 }
 
 void Camera::mouseupdate(glm::vec2& MousePosition) {
